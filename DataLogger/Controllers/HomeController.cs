@@ -17,7 +17,7 @@ namespace DataLogger.Controllers
         {
             _logger = logger;
         }
-
+        //TESTE
         public IActionResult Index()
         {
             return View();
