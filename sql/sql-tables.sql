@@ -8,9 +8,10 @@ use AulaDB
  
 go
 create table tbUsuarios(
-	id int not null identity(1,1) primary key ,
+	id int not null identity(1,1) primary key,
 	usuario varchar(100) not null,
 	senha varchar(100) not null,
+	tipoUsuario varchar(100) not null,
 	fotoPerfil varbinary(max)
 )
  
