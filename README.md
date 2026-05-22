@@ -11,12 +11,12 @@ PBL LP1 SE - N2 2BIM
   4. Componentes: DHT, LDR, RGB
  
 - Site (interface do usuário) - FRONTEND, BACKEND, BANCO DE DADOS 			
-  1. Tela de login (com foto de perfil)                             (frontend: Gabriel - backend: Stefanes)
+  1. Tela de login (com foto de perfil)                             (frontend: Gabriel - backend: Stefanes - CRUD: Nascimento)
   2. Interface de usuário e interface de desenvolvedor              (frontend: Gabriel - backend: Stefanes)
   3. SQL Database Connection                                        (Stefanes)
   4. Dashboard (gráfico e métricas relevantes com filtros)          (Stefanes)
   5. Área sobre (créditos dos devs)                                 (Gabriel)
-  6. Banco de dados (usuários e dispositivos)                       (Nascimento)
+  6. Banco de dados (usuários e dispositivos)                       (Nascimento e Daniel)
   7. Criação de API                                                 (Stefanes)
   8. Telas de consulta com filtros (usuários e dispositivos)        (Stefanes)
   Obs: utilizar ajax em métodos das controllers
