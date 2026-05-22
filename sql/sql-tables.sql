@@ -9,8 +9,8 @@ use AulaDB
 go
 create table tbUsuarios(
 	id int not null identity(1,1) primary key,
-	usuario varchar(100) not null,
-	senha varchar(100) not null,
+	nomeUsuario varchar(100) not null,
+	senhaUsuario varchar(100) not null,
 	tipoUsuario varchar(100) not null,
 	fotoPerfil varbinary(max)
 )
@@ -27,8 +27,8 @@ create table tbRegistros (
 	id int not null identity(1,1) primary key,
 	idDispositivo int not null foreign key references tbDispositivos(id),
     -- referencia o dispositivo que gerou o registro
-	umidade int,
-	luminosidade int,
-	temperatura decimal(5,2),
+	valorUmidade int,
+	valorLuminosidade int,
+	valorTemperatura decimal(5,2),
 	dataHora datetime default getdate() not null -- valor automatico (omitir durante INSERT e UPDATE)
 )
