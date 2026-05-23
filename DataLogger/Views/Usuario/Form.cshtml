@@ -7,6 +7,7 @@
 <form action="Save" method="post" enctype="multipart/form-data" class="col-md-6">
     
     <input type="hidden" name="Operacao" value="@ViewBag.Operacao" />
+    <input type="hidden" asp-for="TipoUsuario" />
 
     <!-- Código do usuário -->    
     <label for="Id" class="control-label">Código de usuário:</label>

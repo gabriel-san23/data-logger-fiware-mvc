@@ -20,10 +20,10 @@ namespace DataLogger.DAO
             SqlParameter[] parametros =
             {
                  new SqlParameter("id", model.Id),
-                 new SqlParameter("nomeUsuario", model.NomeUsuario),
-                 new SqlParameter("senhaUsuario", model.SenhaUsuario),
-                 new SqlParameter("tipoUsuario", model.TipoUsuario),
-                 new SqlParameter("fotoPerfil", imgByte)
+                 new SqlParameter("nome_Usuario", model.NomeUsuario),
+                 new SqlParameter("senha_Usuario", model.SenhaUsuario),
+                 new SqlParameter("tipo_Usuario", model.TipoUsuario),
+                 new SqlParameter("foto_Perfil", imgByte)
                  };
             return parametros;
         }
@@ -33,13 +33,13 @@ namespace DataLogger.DAO
             var u = new UsuarioViewModel()
             {
                 Id = Convert.ToInt32(registro["id"]),
-                NomeUsuario = registro["nomeUsuario"].ToString(),
-                SenhaUsuario = registro["senhaUsuario"].ToString(),
-                TipoUsuario = registro["tipoUsuario"].ToString()
+                NomeUsuario = registro["nome_Usuario"].ToString(),
+                SenhaUsuario = registro["senha_Usuario"].ToString(),
+                TipoUsuario = registro["tipo_Usuario"].ToString()
             };
 
-            if (registro["fotoPerfil"] != DBNull.Value)
-                u.FotoPerfilEmByte = registro["fotoPerfil"] as byte[];
+            if (registro["foto_Perfil"] != DBNull.Value)
+                u.FotoPerfilEmByte = registro["foto_Perfil"] as byte[];
             return u;
         }
     }

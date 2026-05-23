@@ -18,7 +18,11 @@ namespace DataLogger.Controllers
         protected override void PreencheDadosParaView(string Operacao, UsuarioViewModel model)
         {
             if (GeraProximoId && Operacao == "I")
+            {
                 model.Id = DAO.ProximoId();
+                model.TipoUsuario = "padrao";
+            }
+
         }
 
         public byte[] ConvertImageToByte(IFormFile file)
