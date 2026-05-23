@@ -41,9 +41,9 @@ namespace DataLogger.DAO
                         string sql = "select isnull(@@IDENTITY,0)";
                         comando.CommandType = CommandType.Text;
                         comando.CommandText = sql;
-                        int pedidoId = Convert.ToInt32(comando.ExecuteScalar());
+                        int id = Convert.ToInt32(comando.ExecuteScalar());
                         conexao.Close();
-                        return pedidoId;
+                        return id;
                     }
                     else
                         return 0;
