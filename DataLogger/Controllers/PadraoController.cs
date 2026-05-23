@@ -40,7 +40,7 @@ namespace DataLogger.Controllers
         protected virtual void PreencheDadosParaView(string Operacao, T model)
         {
             if (GeraProximoId && Operacao == "I")
-        model.Id = DAO.ProximoId();
+                model.Id = DAO.ProximoId();
         }
         public virtual IActionResult Save(T model, string Operacao)
         {
@@ -77,7 +77,7 @@ namespace DataLogger.Controllers
             if (model.Id <= 0)
                 ModelState.AddModelError("Id", "Id inválido!");
         }
-        public IActionResult Edit(int id)
+        public virtual IActionResult Edit(int id)
         {
             try
             {

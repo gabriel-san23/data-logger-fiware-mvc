@@ -7,6 +7,11 @@ namespace DataLogger.DAO
 {
     public class UsuarioDAO : PadraoDAO<UsuarioViewModel>
     {
+        protected override void SetTabela()
+        {
+            Tabela = "tbUsuarios";
+            ChaveIdentity = true;
+        }
         protected override SqlParameter[] CriaParametros(UsuarioViewModel model)
         {
             object imgByte = model.FotoPerfilEmByte;
@@ -36,11 +41,6 @@ namespace DataLogger.DAO
             if (registro["fotoPerfil"] != DBNull.Value)
                 u.FotoPerfilEmByte = registro["fotoPerfil"] as byte[];
             return u;
-        }
-
-        protected override void SetTabela()
-        {
-            Tabela = "tbUsuarios";
         }
     }
 }

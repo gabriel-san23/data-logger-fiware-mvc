@@ -16,8 +16,8 @@ namespace DataLogger.Controllers
             //se existe esse usuário e senha
             if (usuario == "admin" && senha == "1234")
             {
-                HttpContext.Session.SetString("Logado", "true");
-                return RedirectToAction("index", "Home");
+                //HttpContext.Session.SetString("Logado", "true");
+                return RedirectToAction("index", "Usuario");
             }
             else
             {
@@ -27,7 +27,7 @@ namespace DataLogger.Controllers
         }
         public IActionResult LogOff()
         {
-            HttpContext.Session.Clear();
+            //HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
     }
