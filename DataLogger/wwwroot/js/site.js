@@ -1,4 +1,20 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿const text =
+    "E se você pudesse produzir o queijo perfeito?";
 
-// Write your JavaScript code.
+const typingText = document.getElementById("typing-text");
+
+let index = 0;
+
+function typeWriter() {
+
+    if (index < text.length) {
+
+        typingText.innerHTML += text.charAt(index);
+
+        index++;
+
+        setTimeout(typeWriter, 60);
+    }
+}
+
+window.onload = typeWriter;
