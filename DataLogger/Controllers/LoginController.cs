@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataLogger.DAO;
+using DataLogger.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DataLogger.Controllers
 {
@@ -14,16 +17,34 @@ namespace DataLogger.Controllers
         {
             //Este é apenas um exemplo, aqui você deve consultar na sua tabela de usuários
             //se existe esse usuário e senha
-            if (usuario == "admin" && senha == "1234")
+            try
             {
-                //HttpContext.Session.SetString("Logado", "true");
-                return RedirectToAction("index", "Usuario");
+                var dao = new UsuarioDAO();
+                UsuarioViewModel model = dao.ConsultaPorNome(usuario);
+
+                // caso o usuário não exista
+                // a comparação não funciona
+                if (model == null)
+                {
+                    ViewBag.Erro = "Erro: Usuário não cadastrado!";
+                    return View("Index");
+
+                }
+                else if (senha != model.SenhaUsuario)
+                {
+                    ViewBag.Erro = "Senha incorreta!";
+                    return View("Index");
+                }
+                else
+                {
+                    //HttpContext.Session.SetString("Logado", "true");
+                    return RedirectToAction("index", "home");
+                }
             }
-            else
+            catch (Exception erro)
             {
-                ViewBag.Erro = "Usuário ou senha inválidos!";
-                return View("Index");
-            }
+                return View("Error", new ErrorViewModel(erro.ToString()));
+            }            
         }
         public IActionResult LogOff()
         {
