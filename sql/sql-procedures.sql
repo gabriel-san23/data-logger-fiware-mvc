@@ -111,7 +111,19 @@ BEGIN
 
 END
 
+go
+CREATE OR ALTER PROCEDURE spConsultaPorNome(
+   @NOME_USUARIO varchar(max)
+)
+as
+BEGIN
+   select * from tbUsuarios
+   where nomeUsuario = @NOME_USUARIO
+END
 
+--EXEC spConsultaPorNome 'tbUsuarios','admin'
+select * from tbUsuarios
+where nomeUsuario = 'admin'
 /*
 create table tbDispositivos (
 	id int not null identity(1,1) primary key,

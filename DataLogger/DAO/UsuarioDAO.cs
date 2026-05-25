@@ -13,6 +13,19 @@ namespace DataLogger.DAO
             ChaveIdentity = true;
         }
 
+        public UsuarioViewModel ConsultaPorNome(string nomeUsuario)
+        {
+            var p = new SqlParameter[]
+            {
+                new SqlParameter("NOME_USUARIO", nomeUsuario)
+            };
+            var tabela = HelperDAO.ExecutaProcSelect("spConsultaPorNome", p);
+            if (tabela.Rows.Count == 0)
+                return null;
+            else
+                return MontaModel(tabela.Rows[0]);
+        }
+
         // recebe uma Model (C#)
         // retorna os parâmetros usados na query (SQL)
         protected override SqlParameter[] CriaParametros(UsuarioViewModel model)
