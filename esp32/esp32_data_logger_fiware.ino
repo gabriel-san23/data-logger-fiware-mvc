@@ -219,7 +219,7 @@ void setup() {
   pinMode(GREEN_RGB, OUTPUT);
   pinMode(BLUE_RGB, OUTPUT);
 
-  Wire.begin(25, 26);
+  Wire.begin(25, 26); // Wire.begin(sda, scl);
   Serial.begin(9600);
 
   dht.begin();
