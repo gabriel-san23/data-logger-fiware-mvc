@@ -5,57 +5,42 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DataLogger</title>
-    <link rel="icon"
-          type="image/png"
-          href="~/images/favicon.png">
+    <link rel="icon" type="image/png" href="~/images/favicon.png">
 
     <!-- GOOGLE FONTS -->
-
-    <!--PlayFair Display-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <!--EB Garamond-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
-
-    <!--inter-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
-     <!--roboto-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>        
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
-    <!-- Referencia site.css -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 
 <body>
 
-    <!--Cabeçalho-->
     <header>
-        <!--Links do cabeçalho-->
         <nav>
+            <!-- Logo -->
             <a href="#">
                 <img src="images/wuo-come-queijo.png" alt="Logo">
             </a>
-            <a href="#produto">Produto</a>
-            <a href="#adquira">Plataforma</a>
-            <a href="#equipe">Equipe</a>
-            <a href="#especificacoes">Especificações</a>
-            <a href="#entre">Entre</a>
+
+            <!-- Checkbox oculto para controle do menu mobile -->
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menu">&#9776;</label>
+
+            <!-- Links de navegação -->
+            <div class="nav-links">
+                <a href="#produto">Produto</a>
+                <a href="#adquira">Plataforma</a>
+                <a href="#equipe">Equipe</a>
+                <a href="#especificacoes">Especificações</a>
+                <a href="#entre">Entre</a>
+            </div>
         </nav>
     </header>
 
-    <!--Referencia o arquivo .cshtml-->
     @RenderBody()
-    
-    <!-- Referencia o site.js -->
+
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 

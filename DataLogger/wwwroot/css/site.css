@@ -8,6 +8,10 @@ body {
     background-color: white;
 }
 
+/* =============================================
+   HEADER / NAV
+   ============================================= */
+
 header {
     top: 0;
     left: 0;
@@ -19,25 +23,43 @@ nav {
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    padding: 40px 0;
+    padding: 24px 20px;
     font-family: 'Roboto', sans-serif;
+    flex-wrap: wrap; /* evita overflow em telas estreitas */
+    gap: 12px;
 }
 
-nav img {
-    height: 50px; /* ajusta conforme o tamanho do seu header */
-    width: auto;
+    nav img {
+        height: 50px;
+        width: auto;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #383838;
+    }
+
+        nav a:hover {
+            color: #0a0a0a;
+        }
+
+/* Nav mobile: hambúrguer via checkbox — sem JS */
+.nav-toggle {
+    display: none;
 }
 
-nav a 
-{
-    text-decoration: none;
+.nav-toggle-label {
+    display: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 26px;
+    line-height: 1;
     color: #383838;
 }
 
-nav a:hover 
-{
-    color: #0a0a0a;
-}
+/* =============================================
+   HERO
+   ============================================= */
 
 .hero {
     width: 100%;
@@ -46,18 +68,61 @@ nav a:hover
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 40px;
+    padding: 40px 20px;
 }
 
 #typing-text {
     font-family: 'Inter', sans-serif;
-    font-size: 60px;
+    font-size: clamp(28px, 6vw, 60px); /* escala automática */
     font-weight: 600;
-    color: rgb(29,29,31);
+    color: rgb(29, 29, 31);
     max-width: 900px;
     line-height: 1.2;
-    margin-top: -20px;
 }
+
+/* =============================================
+   TIPOGRAFIA
+   ============================================= */
+
+h2 {
+    background: linear-gradient(90deg, hsla(7, 70%, 33%, 1) 0%, hsla(27, 67%, 47%, 1) 49%, hsla(32, 100%, 57%, 1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 5vw, 57px); /* escala automática */
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 900px;
+}
+
+strong {
+    font-family: 'Inter', sans-serif;
+}
+
+p {
+    font-family: 'Inter', sans-serif;
+    color: #6c6c6c;
+    font-weight: 500;
+    font-size: clamp(16px, 2vw, 23px); /* escala automática */
+    max-width: 400px;
+    line-height: 1.4;
+}
+
+/* =============================================
+   IMAGENS (regra global)
+   ============================================= */
+
+img {
+    display: block;
+    max-width: 100%; /* nunca ultrapassa o container */
+    height: auto;
+    object-fit: cover;
+}
+
+/* =============================================
+   SEÇÃO PARMESÃO
+   ============================================= */
 
 .parmesao {
     display: flex;
@@ -73,51 +138,17 @@ nav a:hover
 }
 
 .parmesao img {
-    width: 500px; /* ou a largura que quiser */
-    height: auto; /* mantém a proporção */
-    object-fit: cover; /* evita distorção */
-    border-radius: 10px;
-    margin-left: 70px;
-}
-
-h2 {
-    background: hsla(7, 70%, 33%, 1);
-    background: linear-gradient(90deg, hsla(7, 70%, 33%, 1) 0%, hsla(27, 67%, 47%, 1) 49%, hsla(32, 100%, 57%, 1) 100%);
-    background: -moz-linear-gradient(90deg, hsla(7, 70%, 33%, 1) 0%, hsla(27, 67%, 47%, 1) 49%, hsla(32, 100%, 57%, 1) 100%);
-    background: -webkit-linear-gradient(90deg, hsla(7, 70%, 33%, 1) 0%, hsla(27, 67%, 47%, 1) 49%, hsla(32, 100%, 57%, 1) 100%);
-    background: linear-gradient(to right, #ff6b6b, #f7c948, #6bffb8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-family: 'Inter', sans-serif;
-    font-size: 57px;
-    font-weight: 700;
-    color: #797878;
-    line-height: 1.2;
-    max-width: 900px;
-}
-
-strong {
-    font-family: 'Inter', sans-serif;
-}
-
-p {
-    font-family: 'Inter', sans-serif;
-    text-decoration: none;
-    color: #6c6c6c;
-    font-weight: 640;
-    font-size: 23px;
-    max-width: 400px;
-    line-height:1.4;
-}
-
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 900px;
+    width: 500px;
+    max-width: 100%;
     height: auto;
     object-fit: cover;
+    border-radius: 10px;
+    margin-left: 0; /* retirado margin-left fixo */
 }
+
+/* =============================================
+   SEÇÃO APRESENTA PRODUTO
+   ============================================= */
 
 .apresenta-produto {
     display: flex;
@@ -126,16 +157,136 @@ img {
     padding: 60px;
 }
 
-.apresenta-produto {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    .apresenta-produto img {
+        width: 500px;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .apresenta-produto-texto {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+/* =============================================
+   SEPARADOR
+   ============================================= */
+
+.separador {
+    width: 80%;
+    margin: 0 auto;
+    height: 1px;
+    background-color: #e0e0e0;
 }
 
-.apresenta-produto img {
-    width: 500px; /* ou a largura que quiser */
-    height: auto; /* mantém a proporção */
-    object-fit: cover; /* evita distorção */
-    border-radius: 10px;
-    margin-left: 70px;
+/* =============================================
+   RESPONSIVIDADE — TABLET (max 900px)
+   ============================================= */
+
+@media (max-width: 900px) {
+    nav {
+        padding: 16px 20px;
+        justify-content: space-between;
+    }
+
+    .parmesao {
+        gap: 30px;
+        padding: 40px 30px;
+    }
+
+        .parmesao img {
+            width: 100%;
+        }
+
+    .apresenta-produto {
+        gap: 30px;
+        padding: 40px 30px;
+    }
+}
+
+/* =============================================
+   RESPONSIVIDADE — MOBILE (max 600px)
+   ============================================= */
+
+@media (max-width: 600px) {
+
+    /* Nav vira coluna */
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+        gap: 8px;
+    }
+
+        nav img {
+            height: 40px;
+        }
+
+    /* Seções viram coluna */
+    .parmesao,
+    .apresenta-produto {
+        flex-direction: column;
+        padding: 30px 16px;
+        gap: 24px;
+    }
+
+        .parmesao img,
+        .apresenta-produto img {
+            width: 100%;
+            margin-left: 0;
+            border-radius: 8px;
+        }
+
+    /* Parágrafo com largura total no mobile */
+    p {
+        max-width: 100%;
+    }
+
+    h2 {
+        max-width: 100%;
+    }
+
+    .hero {
+        padding: 30px 16px;
+    }
+}
+
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    .nav-toggle-label {
+        display: block;
+    }
+
+    .nav-links {
+        display: none; /* esconde por padrão */
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        padding: 10px 0;
+    }
+
+    /* Quando o checkbox está marcado, mostra o menu */
+    .nav-toggle:checked ~ .nav-links {
+        display: flex;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+        /* Logo e hambúrguer ficam na mesma linha */
+        nav > a:first-child {
+            flex: 1;
+        }
 }
