@@ -12,6 +12,9 @@ namespace DataLogger.DAO
             Tabela = "tbUsuarios";
             ChaveIdentity = true;
         }
+
+        // recebe uma Model (C#)
+        // retorna os parâmetros usados na query (SQL)
         protected override SqlParameter[] CriaParametros(UsuarioViewModel model)
         {
             object imgByte = model.FotoPerfilEmByte;
@@ -28,18 +31,20 @@ namespace DataLogger.DAO
             return parametros;
         }
 
+        // recebe registro do banco de dados (SQL)
+        // retorna uma Model (C#)
         protected override UsuarioViewModel MontaModel(DataRow registro)
         {
             var u = new UsuarioViewModel()
             {
                 Id = Convert.ToInt32(registro["id"]),
-                NomeUsuario = registro["nome_Usuario"].ToString(),
-                SenhaUsuario = registro["senha_Usuario"].ToString(),
-                TipoUsuario = registro["tipo_Usuario"].ToString()
+                NomeUsuario = registro["nomeUsuario"].ToString(),
+                SenhaUsuario = registro["senhaUsuario"].ToString(),
+                TipoUsuario = registro["tipoUsuario"].ToString()
             };
 
-            if (registro["foto_Perfil"] != DBNull.Value)
-                u.FotoPerfilEmByte = registro["foto_Perfil"] as byte[];
+            if (registro["fotoPerfil"] != DBNull.Value)
+                u.FotoPerfilEmByte = registro["fotoPerfil"] as byte[];
             return u;
         }
     }
