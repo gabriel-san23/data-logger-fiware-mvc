@@ -20,9 +20,10 @@
     <header>
         <nav>
             <!-- Logo -->
-            <a asp-controller="Home" asp-action="Index">
+            <!--*<a asp-controller="Home" asp-action="Index">
                 <img src="images/wuo-come-queijo.png" alt="Logo">
             </a>
+            -->
 
             <!-- Checkbox oculto para controle do menu mobile -->
             <input type="checkbox" id="nav-toggle" class="nav-toggle">
@@ -30,10 +31,13 @@
 
             <!-- Links de navegação -->
             <div class="nav-links">
+                <a href="#home">Home</a>
                 <a href="#produto">Produto</a>
                 <a href="#adquira">Plataforma</a>
                 <a href="#equipe">Equipe</a>
                 <a href="#especificacoes">Especificações</a>
+                <a href="#sobre">Sobre</a>
+                <a href="#sair">Sair</a>
                 <a asp-controller="Login" asp-action="Index">Entre</a>
             </div>
         </nav>

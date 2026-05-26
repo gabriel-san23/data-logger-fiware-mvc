@@ -27,10 +27,13 @@ nav {
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    padding: 24px 20px;
+    padding: 10px 20px;
     font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #808080;
     flex-wrap: wrap; /* evita overflow em telas estreitas */
     gap: 12px;
+    background-color: #383838;
 }
 
     nav img {
@@ -144,6 +147,7 @@ img {
     align-items: center;
     gap: 60px;
     padding: 60px;
+    margin-bottom: 100px;
 }
 
 .parmesao-texto {
@@ -170,6 +174,7 @@ img {
     align-items: center;
     gap: 60px;
     padding: 60px;
+    margin-bottom: 100px;
 }
 
     .apresenta-produto img {
@@ -191,9 +196,12 @@ img {
    ============================================= */
 
 .especificacoes {
+    display: flex;
+    justify-content: center;
     align-items: center;
     gap: 60px;
     padding: 60px;
+    margin-bottom: 20px;
 }
 
     .especificacoes img {
@@ -221,6 +229,59 @@ img {
     max-width: 900px;
     line-height: 1.2;
 }
+
+/* =============================================
+   SEÇÃO FOTO WUO
+   ============================================= */
+
+.wuo-segurando-queijo {
+    display: flex; /* ← faltou */
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+    margin-bottom: 100px;
+}
+
+    .wuo-segurando-queijo img {
+        width: 500px;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+/* =============================================
+   SEÇÃO SOBRE
+   ============================================= */
+
+.sobre-produto-grupo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+    margin-bottom: 100px;
+}
+
+.sobre-produto-grupo-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+}
+
+.sobre-produto-grupo p {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+}
+
 
 /* =============================================
    SEPARADOR
