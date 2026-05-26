@@ -139,7 +139,7 @@ namespace DataLogger.DAO
 
 
         //IOT AGENT - PROVENDO UM DATA LOGGER
-        public async Task<string> ProverDataLogger(string serverIp)
+        public async Task<string> ProverDataLogger(string serverIp, string deviceId, string entityName)
         {
             try
             {
@@ -153,8 +153,8 @@ namespace DataLogger.DAO
                         {
                             new
                             {
-                                device_id = "datalogger001", //id variável
-                                entity_name = "urn:ngsi-ld:DataLogger:001", //id variável
+                                device_id = deviceId, 
+                                entity_name = entityName,
                                 entity_type = "DataLogger",
                                 protocol = "PDI-IoTA-UltraLight",
                                 transport = "MQTT",
@@ -213,13 +213,13 @@ namespace DataLogger.DAO
         }
 
         //IOT AGENT - RESULT OF DATA LOGGER LUMINOSITY
-        public async Task<string> ResultadoLuminosidadeDataLogger(string serverIp)
+        public async Task<string> ResultadoLuminosidadeDataLogger(string serverIp, string entityName)
         {
             try
             {
                 using (var client = CriaClienteFiware())
                 {
-                    string url = $"http://{serverIp}:1026/v2/entities/urn:ngsi-ld:DataLogger:001/attrs/luminosity";
+                    string url = $"http://{serverIp}:1026/v2/entities/{entityName}/attrs/luminosity";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
 
@@ -238,13 +238,13 @@ namespace DataLogger.DAO
         }
 
         //IOT AGENT - RESULT OF DATA LOGGER TEMPERATURE
-        public async Task<string> ResultadoTemperaturaDataLogger(string serverIp)
+        public async Task<string> ResultadoTemperaturaDataLogger(string serverIp, string entityName)
         {
             try
             {
                 using (var client = CriaClienteFiware())
                 {
-                    string url = $"http://{serverIp}:1026/v2/entities/urn:ngsi-ld:DataLogger:001/attrs/temperature";
+                    string url = $"http://{serverIp}:1026/v2/entities/{entityName}/attrs/temperature";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
 
@@ -263,13 +263,13 @@ namespace DataLogger.DAO
         }
 
         //IOT AGENT - RESULT OF DATA LOGGER HUMIDITY
-        public async Task<string> ResultadoHumidadeDataLogger(string serverIp)
+        public async Task<string> ResultadoUmidadeDataLogger(string serverIp, string entityName)
         {
             try
             {
                 using (var client = CriaClienteFiware())
                 {
-                    string url = $"http://{serverIp}:1026/v2/entities/urn:ngsi-ld:DataLogger:001/attrs/humidity";
+                    string url = $"http://{serverIp}:1026/v2/entities/{entityName}/attrs/humidity";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
 
@@ -288,13 +288,13 @@ namespace DataLogger.DAO
         }
 
         //IOT AGENT - DELETE DATA LOGGER IN IOT AGENT
-        public async Task<string> DeletarDispositivoIOT(string serverIp)
+        public async Task<string> DeletarDispositivoIOT(string serverIp, string deviceId)
         {
             try
             {
                 using (var client = CriaClienteFiware())
                 {
-                    string url = $"http://{serverIp}:4041/iot/devices/datalogger001";
+                    string url = $"http://{serverIp}:4041/iot/devices/{deviceId}";
                     var response = await client.DeleteAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
 
@@ -337,7 +337,7 @@ namespace DataLogger.DAO
             }
         }
 
-        public async Task<string> SubscribeParameters(string serverIp)
+        public async Task<string> SubscribeParameters(string serverIp, string entityName)
         {
             try
             {
@@ -352,7 +352,7 @@ namespace DataLogger.DAO
                         {
                             entities = new[]
                             {
-                                new { id = "urn:ngsi-ld:DataLogger:001", type = "DataLogger" }
+                                new { id = entityName, type = "DataLogger" }
                             },
                             condition = new { attrs = new[] { "luminosity", "temperature", "humidity" } }
                         },
@@ -383,13 +383,13 @@ namespace DataLogger.DAO
             }
         }
 
-        public async Task<string> RequestLuminosity(string serverIp, int lastN = 30)
+        public async Task<string> RequestLuminosity(string serverIp, string entityName, int lastN = 30)
         {
             try
             {
                 using (var client = CriaClienteFiware())
                 {
-                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/urn:ngsi-ld:DataLogger:001/attributes/luminosity?lastN={lastN}";
+                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/{entityName}/attributes/luminosity?lastN={lastN}";
 
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -408,13 +408,13 @@ namespace DataLogger.DAO
             }
         }
 
-        public async Task<string> RequestTemperature(string serverIp, int lastN = 30)
+        public async Task<string> RequestTemperature(string serverIp, string entityName, int lastN = 30)
         {
             try
             {
                 using (var client = CriaClienteFiware())
                 {
-                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/urn:ngsi-ld:DataLogger:001/attributes/temperature?lastN={lastN}";
+                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/{entityName}/attributes/temperature?lastN={lastN}";
 
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -433,13 +433,13 @@ namespace DataLogger.DAO
             }
         }
 
-        public async Task<string> RequestHumidity(string serverIp, int lastN = 30)
+        public async Task<string> RequestHumidity(string serverIp, string entityName, int lastN = 30)
         {
             try
             {
                 using (var client = CriaClienteFiware())
                 {
-                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/urn:ngsi-ld:DataLogger:001/attributes/humidity?lastN={lastN}";
+                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/{entityName}/attributes/humidity?lastN={lastN}";
 
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();

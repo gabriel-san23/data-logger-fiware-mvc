@@ -37,7 +37,10 @@ namespace DataLogger.Controllers
                 }
                 else
                 {
-                    //HttpContext.Session.SetString("Logado", "true");
+                    HttpContext.Session.SetString("Logado", "true");
+                    HttpContext.Session.SetString("NomeUsuario", model.NomeUsuario);
+                    HttpContext.Session.SetInt32("IdUsuario", model.Id);
+
                     return RedirectToAction("index", "home");
                 }
             }
@@ -48,7 +51,7 @@ namespace DataLogger.Controllers
         }
         public IActionResult LogOff()
         {
-            //HttpContext.Session.Clear();
+            HttpContext.Session.Clear();
             return RedirectToAction("Index");
         }
     }

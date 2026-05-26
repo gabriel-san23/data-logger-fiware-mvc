@@ -1,6 +1,7 @@
 ﻿using DataLogger.DAO;
 using DataLogger.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 
 namespace DataLogger.Controllers
@@ -11,6 +12,20 @@ namespace DataLogger.Controllers
         protected bool GeraProximoId { get; set; }
         protected string NomeViewIndex { get; set; } = "index";
         protected string NomeViewForm { get; set; } = "form";
+
+        protected bool ExigeAutenticacao {  get; set; } = true;
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (ExigeAutenticacao && !HelperControllers.VerificaUserLogado(HttpContext.Session))
+                context.Result = RedirectToAction("Index", "Login");
+            else
+            {                
+                ViewBag.Logado = true;
+                base.OnActionExecuting(context);
+            }
+        }
+
         public virtual IActionResult Index()
         {
             try
