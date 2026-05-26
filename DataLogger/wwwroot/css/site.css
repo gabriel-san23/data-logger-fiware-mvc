@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+html{
+    scroll-behavior: smooth;
+}
+
 body {
     background-color: white;
 }
@@ -84,7 +88,7 @@ nav {
    TIPOGRAFIA
    ============================================= */
 
-h2 {
+h2.gradiente {
     background: linear-gradient(90deg, hsla(7, 70%, 33%, 1) 0%, hsla(27, 67%, 47%, 1) 49%, hsla(32, 100%, 57%, 1) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -96,14 +100,25 @@ h2 {
     max-width: 900px;
 }
 
+h2.normal {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 5vw, 57px); /* escala automática */
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 900px;
+    color: #282828;
+}
+
 strong {
     font-family: 'Inter', sans-serif;
+    color: rgb(29, 29, 31);
+    font-weight: 800;
 }
 
 p {
     font-family: 'Inter', sans-serif;
     color: #6c6c6c;
-    font-weight: 500;
+    font-weight: 630;
     font-size: clamp(16px, 2vw, 23px); /* escala automática */
     max-width: 400px;
     line-height: 1.4;
@@ -170,6 +185,42 @@ img {
         flex-direction: column;
         gap: 20px;
     }
+
+/* =============================================
+   SEÇÃO ESPECIFICAÇÕES
+   ============================================= */
+
+.especificacoes {
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+}
+
+    .especificacoes img {
+        width: 500px;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+.especificacoes-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+}
+
+.especificacoes p {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+}
 
 /* =============================================
    SEPARADOR
