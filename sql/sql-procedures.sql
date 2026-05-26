@@ -76,16 +76,11 @@ CREATE OR ALTER PROCEDURE spInsert_tbUsuarios(
 )
 AS 
 BEGIN
-	
-	IF EXISTS ( SELECT 1 FROM tbUsuarios WHERE nomeUsuario = @NOME_USUARIO)
-	BEGIN
-		PRINT 'Inserção não realizada, usuario já cadastrado na base'
-		RETURN 1
-	END
-	ELSE
-		INSERT INTO tbUsuarios (nomeUsuario, senhaUsuario, tipoUsuario, fotoPerfil) VALUES
-		(@NOME_USUARIO,@SENHA_USUARIO,@TIPO_USUARIO,@FOTO_PERFIL)
-	END
+
+	INSERT INTO tbUsuarios (nomeUsuario, senhaUsuario, tipoUsuario, fotoPerfil) VALUES
+	(@NOME_USUARIO,@SENHA_USUARIO,@TIPO_USUARIO,@FOTO_PERFIL)
+
+END
 	
 GO
 
