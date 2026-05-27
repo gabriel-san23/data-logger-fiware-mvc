@@ -55,23 +55,30 @@ const unsigned long intervaloAudio = 20000; // 20 segundos de silêncio entre as
 WiFiClient espClient;
 PubSubClient MQTT(espClient);
 
-void setup() {
+void initPins() {
   pinMode(EMBEDDED_LED, OUTPUT);
-  digitalWrite(EMBEDDED_LED, LOW);
 
   pinMode(RED_RGB, OUTPUT);
   pinMode(GREEN_RGB, OUTPUT);
   pinMode(BLUE_RGB, OUTPUT);
 
-  Wire.begin(SDA_LCD, SCL_LCD); // PINOS LCD I2C
-  Serial.begin(9600);
-
   pinMode(A0_LDR, INPUT);
-  dht.begin();
+}
 
+void initDisplayLCD() {
+  Wire.begin(SDA_LCD, SCL_LCD); // PINOS LCD I2C
   lcd.init();
   lcd.backlight();
   lcd.print("Hello!");
+}
+
+void setup() {
+  initPins();
+  digitalWrite(EMBEDDED_LED, LOW);
+
+  initDisplayLCD();
+  Serial.begin(9600);
+  dht.begin();
 
   // initMP3();
   initWiFi();
@@ -79,6 +86,10 @@ void setup() {
   
   // myDFPlayer.playFolder(6, 5);
   // aguardarAudio();
+
+  Serial.println();
+  Serial.println("------ Leitura dos Sensores ------");
+  Serial.println("");
 }
 
 void loop() {
@@ -90,7 +101,8 @@ void loop() {
 
   if (tempoAtual - tempoAnteriorTelemetria >= intervaloTelemetria) {
     tempoAnteriorTelemetria = tempoAtual;
-    readAndPublishSensors(); 
+    readAndPublishSensors();
+    printSensorValues(); // exibe valores no Serial Monitor e no Display LCD
   }
 
   if (tempoAtual - tempoAnteriorAudio >= intervaloAudio) {    

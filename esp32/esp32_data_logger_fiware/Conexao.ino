@@ -27,6 +27,7 @@ void initMQTT() {
   Serial.println("------Conexao MQTT------");
   MQTT.setServer(default_BROKER_MQTT, default_BROKER_PORT);
   MQTT.setCallback(mqtt_callback);
+  reconnectMQTT();
 }
 
 void reconnectMQTT() {
