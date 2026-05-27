@@ -1,24 +1,15 @@
 // MQTT
+
+// Um callback MQTT é uma função assíncrona invocada automaticamente quando
+// um cliente recebe uma mensagem de um broker em um tópico subscrito.
 void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   String msg;
   for (int i = 0; i < length; i++) {
     msg += (char)payload[i];
   }
 
-  // Forma o padrão de tópico para comparação
-    String onTopic = String(TOPIC_PREFIX) + "@led_on|";
-    String offTopic = String(TOPIC_PREFIX) + "@led_off|";
-
-  if (msg.equals(onTopic)) {
-    digitalWrite(EMBEDDED_LED, HIGH);
-    Serial.println("CMD: LED_ON");
-    MQTT.publish(TOPICO_CMDEXE, "led_on|led_on_ok");
-  }
-  else if (msg.equals(offTopic)) {
-    digitalWrite(EMBEDDED_LED, LOW);
-    Serial.println("CMD: LED_OFF");
-    MQTT.publish(TOPICO_CMDEXE, "led_off|led_off_ok");
-  }
+  // Ou seja, a variável "msg" recebe comandos externos para serem processados no ESP32.
+  // No data logger, não controlamos nada remotamente, apenas monitoramos grandezas.
 }
 
 void initMQTT() {

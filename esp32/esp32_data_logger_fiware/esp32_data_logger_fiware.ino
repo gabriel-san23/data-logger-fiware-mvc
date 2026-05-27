@@ -9,6 +9,7 @@
 const char* default_SSID = "Wokwi-GUEST";
 const char* default_PASSWORD = "";
 #define DEVICE_ID "001" // ID gerado pelo ASP.NET
+// deve ser preenchido de acordo com o valor recebido pelo usuário
 
 // Variáveis MQTT
 const char* default_BROKER_MQTT = "SEU_IP_AQUI";

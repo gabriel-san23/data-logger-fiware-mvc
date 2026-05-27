@@ -12,8 +12,13 @@ void readAndPublishSensors() {
     return;
   }
 
-  // String payload = "temperatura|" + String(temperatura) + "|umidade|" + String(umidade) + "|luminosidade|" + String(luminosidade);
-  // MQTT.publish(TOPICO_PUBLISH, payload.c_str());
+  // Construindo o payload no padrão Ultralight 2.0 exigido pelo FIWARE
+  // Formato: object_id|valor|object_id|valor|...
+  String payload = "t|" + String(temperatura) + "|h|" + String(umidade) + "|l|" + String(luminosidade);
+  MQTT.publish(TOPICO_PUBLISH, payload.c_str());
+
+  Serial.print("Dados publicados no tópico: ");
+  Serial.println(payload);
 }
 
 void printSensorValues(){
