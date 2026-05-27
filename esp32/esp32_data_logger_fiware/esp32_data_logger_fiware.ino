@@ -5,28 +5,32 @@
 #include <PubSubClient.h>
 // #include "DFRobotDFPlayerMini.h"
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-
+// Parâmetros informados pelo usuário
 const char* default_SSID = "Wokwi-GUEST";
 const char* default_PASSWORD = "";
+#define DEVICE_ID "001" // ID gerado pelo ASP.NET
 
-// Variáveis MQTT (Comentadas)
+// Variáveis MQTT
 const char* default_BROKER_MQTT = "SEU_IP_AQUI";
 const int default_BROKER_PORT = 1883;
-const char* TOPICO_SUBSCRIBE = "/TEF/datalogger001/cmd";
-const char* TOPICO_PUBLISH = "/TEF/datalogger001/attrs";
-const char* TOPICO_CMDEXE = "/TEF/datalogger001/cmdexe";
-const char* ID_MQTT = "fiware_001";
+
+const char* ID_MQTT = "fiware_" DEVICE_ID; //fiware_001
+const char* TOPIC_PREFIX = "datalogger" DEVICE_ID; //datalogger001
+const char* TOPICO_SUBSCRIBE = "/TEF/datalogger" DEVICE_ID "/cmd";
+const char* TOPICO_PUBLISH = "/TEF/datalogger" DEVICE_ID "/attrs";
+const char* TOPICO_CMDEXE = "/TEF/datalogger" DEVICE_ID "/cmdexe";
 
 const int EMBEDDED_LED = 2;
 const int RED_RGB = 19;
 const int GREEN_RGB = 18;
 const int BLUE_RGB = 5;
 const int A0_LDR = 34;
-const int SDA_DHT = 32;
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 const int SDA_LCD = 25;
 const int SCL_LCD = 26;
 
+const int SDA_DHT = 32;
 #define DHTTYPE DHT22
 DHT dht(SDA_DHT, DHTTYPE);
 
@@ -43,10 +47,10 @@ float umidade = 0;
 int luminosidade = 0;
 
 unsigned long tempoAnteriorTelemetria = 0;
-const unsigned long intervaloTelemetria = 2000; 
+const unsigned long intervaloTelemetria = 2000; // 2 segundos para o FIWARE/LCD
 
 unsigned long tempoAnteriorAudio = 0;
-const unsigned long intervaloAudio = 20000; 
+const unsigned long intervaloAudio = 20000; // 20 segundos de silêncio entre as falas
 
 WiFiClient espClient;
 PubSubClient MQTT(espClient);

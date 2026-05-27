@@ -15,12 +15,16 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
     msg += (char)payload[i];
   }
 
-  if (msg == "datalogger001@led_on|") {
+  // Forma o padrão de tópico para comparação
+    String onTopic = String(TOPIC_PREFIX) + "@led_on|";
+    String offTopic = String(TOPIC_PREFIX) + "@led_off|";
+
+  if (msg.equals(onTopic)) {
     digitalWrite(EMBEDDED_LED, HIGH);
     Serial.println("CMD: LED_ON");
     MQTT.publish(TOPICO_CMDEXE, "led_on|led_on_ok");
   }
-  else if (msg == "datalogger001@led_off|") {
+  else if (msg.equals(offTopic)) {
     digitalWrite(EMBEDDED_LED, LOW);
     Serial.println("CMD: LED_OFF");
     MQTT.publish(TOPICO_CMDEXE, "led_off|led_off_ok");
