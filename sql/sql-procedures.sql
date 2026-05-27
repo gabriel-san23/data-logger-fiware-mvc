@@ -67,7 +67,8 @@ create table tbUsuarios(
 */
 
 go
-CREATE OR ALTER PROCEDURE SP_INSERE_USUARIO(
+CREATE OR ALTER PROCEDURE spInsert_tbUsuarios(
+	@ID int,
 	@NOME_USUARIO VARCHAR(100) ,
 	@SENHA_USUARIO VARCHAR(100) ,
 	@TIPO_USUARIO VARCHAR(100) ,
@@ -75,79 +76,49 @@ CREATE OR ALTER PROCEDURE SP_INSERE_USUARIO(
 )
 AS 
 BEGIN
-	
-	IF EXISTS ( SELECT 1 FROM tbUsuarios WHERE nomeUsuario = @NOME_USUARIO)
-	BEGIN
-		PRINT 'Inserção não realizada, usuario já cadastrado na base'
-		RETURN 1
-	END
-	ELSE
-		INSERT INTO tbUsuarios (nomeUsuario, senhaUsuario, tipoUsuario, fotoPerfil) VALUES
-		(@NOME_USUARIO,@SENHA_USUARIO,@TIPO_USUARIO,@FOTO_PERFIL)
-	END
+
+	INSERT INTO tbUsuarios (nomeUsuario, senhaUsuario, tipoUsuario, fotoPerfil) VALUES
+	(@NOME_USUARIO,@SENHA_USUARIO,@TIPO_USUARIO,@FOTO_PERFIL)
+
+END
 	
 GO
 
---EXEC SP_INSERE_USUARIO 'DANIEL','dani1234','admin',00100101010100010100101
+--EXEC spInsert_USUARIO 'DANIEL','dani1234','admin',00100101010100010100101
 
 go
-CREATE OR ALTER PROCEDURE SP_UPDATE_USUARIO_NOME(
-	@ID_USUARIO INT, 
-	@NOVO_NOME VARCHAR(100)
+CREATE OR ALTER PROCEDURE spUpdate_tbUsuarios(
+	@ID int,
+	@NOME_USUARIO VARCHAR(100) ,
+	@SENHA_USUARIO VARCHAR(100) ,
+	@TIPO_USUARIO VARCHAR(100) ,
+	@FOTO_PERFIL VARBINARY(MAX)
 )
 AS
 BEGIN
 		
 	UPDATE A
-	SET A.nomeUsuario = @NOVO_NOME
+	SET A.nomeUsuario = @NOME_USUARIO,
+		A.senhaUsuario = @SENHA_USUARIO,
+		A.FOTOPERFIL = @FOTO_PERFIL
 	FROM tbUsuarios A
-	WHERE A.ID = @ID_USUARIO
+	WHERE A.ID = @ID
 
 END
-GO
-
---EXEC SP_UPDATE_USUARIO_NOME 4,'DANIEL NOVO'
 
 go
-CREATE OR ALTER PROCEDURE SP_UPDATE_USUARIO_SENHA(
-	@ID_USUARIO INT, 
-	@NOVA_SENHA VARCHAR(100)
+CREATE OR ALTER PROCEDURE spConsultaPorNome(
+   @NOME_USUARIO varchar(max)
 )
-AS
+as
 BEGIN
-		
-	UPDATE A
-	SET A.senhaUsuario = @NOVA_SENHA
-	FROM tbUsuarios A
-	WHERE A.ID = @ID_USUARIO
-
-
+   select * from tbUsuarios
+   where nomeUsuario = @NOME_USUARIO
 END
-GO
 
---EXEC SP_UPDATE_USUARIO_SENHA 4,'Senha Nova'
-
-go
-CREATE OR ALTER PROCEDURE SP_UPDATE_USUARIO_FOTO(
-	@ID_USUARIO INT, 
-	@NOVA_FOTO VARBINARY(MAX)
-)
-AS
-BEGIN
-		
-	UPDATE A
-	SET A.FOTOPERFIL = @NOVA_FOTO
-	FROM tbUsuarios A
-	WHERE A.ID = @ID_USUARIO
-
-
-END
-GO
-
---exec SP_UPDATE_USUARIO_FOTO 4,01010011111001010100101001
-
-
-
+--EXEC spConsultaPorNome 'tbUsuarios','admin'
+select * from tbUsuarios
+where nomeUsuario = 'admin'
 /*
 create table tbDispositivos (
 	id int not null identity(1,1) primary key,
@@ -157,7 +128,7 @@ create table tbDispositivos (
 )
 */
 go
-CREATE OR ALTER PROCEDURE SP_INSERE_DISPOSITIVO(
+CREATE OR ALTER PROCEDURE spInsert_tbDISPOSITIVOS(
 	@DESCRICAO VARCHAR(100),
 	@ID_USUARIO INT
 )
@@ -170,7 +141,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE SP_UPDATE_DISPOSITIVO(
+CREATE OR ALTER PROCEDURE spUpdate_tbDISPOSITIVOS(
 	@ID_DISPOSITIVO INT,
 	@DESCRICAO VARCHAR(100)
 )
@@ -180,11 +151,11 @@ BEGIN
 	UPDATE A
 	SET A.DESCRICAO = @DESCRICAO
 	FROM tbDispositivos A
-	WHERE A.ID = ID_DISPOSITIVO
+	WHERE A.ID = @ID_DISPOSITIVO
 
 END
 
--- EXEC SP_UPDATE_DISPOSITIVO 2,'Atualizado por SP'
+-- EXEC spUpdate_DISPOSITIVO 2,'Atualizado por SP'
 
 /*
 create table tbRegistros (
@@ -199,17 +170,17 @@ create table tbRegistros (
 */
 
 go
-CREATE OR ALTER PROCEDURE SP_INSERE_REGISTRO(
-	@ID_DISPOSITIVO INT,
-	@VALOR_UMIDADE INT,
-	@VALOR_LUMINOSIDADE INT,
-	@VALOR_TEMPERATURA DECIMAL(5,2)
+CREATE OR ALTER PROCEDURE spInsert_tbREGISTROS(
+	@idDispositivo INT,
+	@valorUmidade INT,
+	@valorLuminosidade INT,
+	@valorTemperatura DECIMAL(5,2)
 )
 AS
 BEGIN
 	
 	INSERT INTO tbRegistros(idDispositivo,valorUmidade,valorLuminosidade,valorTemperatura)
-	VALUES (@ID_DISPOSITIVO,@VALOR_UMIDADE,@VALOR_LUMINOSIDADE,@VALOR_TEMPERATURA)
+	VALUES (@idDispositivo,@valorUmidade,@valorLuminosidade,@valorTemperatura)
 
 
 END
