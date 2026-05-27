@@ -74,7 +74,7 @@ void setup() {
   lcd.print("Hello!");
 
   // initMP3();
-  reconectWiFi();
+  initWiFi();
   initMQTT();
   
   // myDFPlayer.playFolder(6, 5);
@@ -82,9 +82,9 @@ void setup() {
 }
 
 void loop() {
-  if (WiFi.status() != WL_CONNECTED) reconectWiFi();
-  if (!MQTT.connected()) reconnectMQTT();
-  MQTT.loop(); 
+  reconnectWiFi();
+  reconnectMQTT();
+  MQTT.loop();
 
   unsigned long tempoAtual = millis();
 
@@ -97,4 +97,5 @@ void loop() {
     // falarGrandezas();     
     tempoAnteriorAudio = millis(); 
   }
+  delay(10);
 }
