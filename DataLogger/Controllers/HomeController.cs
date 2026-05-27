@@ -130,6 +130,7 @@ namespace DataLogger.Controllers
                 await _fiwareServices.SubscribeParameters(serverIp, entityName);
                 _subscricoesFeitas[chave] = true;
             }
+
         }
 
         private void SalvarDadosDoFiwareNoBanco(string jsonFiware, int idDispositivo, string tipoAtributo)
