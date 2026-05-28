@@ -33,8 +33,6 @@
             <div class="nav-links">
                 <a asp-controller="Home" asp-action="Index">Home</a>
                 <a href="#produto">Produto</a>
-                <a href="#adquira">Plataforma</a>
-                <a href="#equipe">Equipe</a>
                 <a href="#sobre">Sobre</a>
                 <a href="#sair">Sair</a>
                 <a asp-controller="Login" asp-action="Index">Entre</a>
@@ -43,6 +41,46 @@
     </header>
 
     @RenderBody()
+
+    <footer class="rodape">
+
+    <div class="rodape-topo">
+        <div class="separador"></div>
+    </div>
+
+    <div class="rodape-conteudo">
+
+        <div class="rodape-col">
+            <span class="rodape-titulo-col">Navegação</span>
+            <a href="#produto">Produto</a>
+            <a href="#adquira">Plataforma</a>
+            <a href="#equipe">Equipe</a>
+            <a href="#sobre">Sobre</a>
+        </div>
+
+        <div class="rodape-col">
+            <span class="rodape-titulo-col">Sistema</span>
+            <span class="rodape-info">ESP32 + DHT11 + LDR</span>
+            <span class="rodape-info">FIWARE + STH-Comet</span>
+            <span class="rodape-info">MongoDB</span>
+        </div>
+
+        <div class="rodape-col">
+            <span class="rodape-titulo-col">Instituição</span>
+            <span class="rodape-info">Faculdade Engenheiro</span>
+            <span class="rodape-info">Salvador Arena</span>
+        </div>
+
+    </div>
+
+    <div class="rodape-base">
+        <div class="separador"></div>
+        <p class="rodape-copy">
+            Copyright &copy; @DateTime.Now.Year DataLogger. Projeto Acadêmico — 2º Bimestre.
+        </p>
+    </div>
+
+</footer>
 
     <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
