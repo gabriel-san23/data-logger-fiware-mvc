@@ -21,9 +21,7 @@ p {
     line-height: 1.4;
 }
 
-/* =============================================
-   HEADER / NAV
-   ============================================= */
+/*HEADER*/
 
 header {
     top: 0;
@@ -62,7 +60,7 @@ nav {
             color: white;
         }
 
-/* Nav mobile: hambúrguer via checkbox — sem JS */
+/* Nav mobile: */
 .nav-toggle {
     display: none;
 }
@@ -76,9 +74,7 @@ nav {
     color: #383838;
 }
 
-/* =============================================
-   HERO
-   ============================================= */
+/*HERO*/
 
 .hero {
     width: 100%;
@@ -99,9 +95,7 @@ nav {
     line-height: 1.2;
 }
 
-/* =============================================
-   TIPOGRAFIA
-   ============================================= */
+/*TIPOGRAFIA*/
 
 h2.gradiente {
     background: linear-gradient(90deg, hsla(7, 70%, 33%, 1) 0%, hsla(27, 67%, 47%, 1) 49%, hsla(32, 100%, 57%, 1) 100%);
@@ -127,7 +121,7 @@ h2.normal {
 h3.normal {
     font-family: 'Inter', sans-serif;
     font-size: clamp(17px, 3vw, 40px); /* escala automática */
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.2;
     max-width: 900px;
     color: #282828;
@@ -140,9 +134,7 @@ strong {
 }
 
 
-/* =============================================
-   IMAGENS (regra global)
-   ============================================= */
+/*IMAGENS (regra global)*/
 
 img {
     display: block;
@@ -151,9 +143,7 @@ img {
     object-fit: cover;
 }
 
-/* =============================================
-   SEÇÃO PARMESÃO
-   ============================================= */
+/*SEÇÃO PARMESÃO*/
 
 .parmesao {
     display: flex;
@@ -205,9 +195,7 @@ img {
         gap: 20px;
     }
 
-/* =============================================
-   SEÇÃO ESPECIFICAÇÕES
-   ============================================= */
+/*SEÇÃO ESPECIFICAÇÕES*/
 
 .especificacoes {
     display: flex;
@@ -244,9 +232,7 @@ img {
     line-height: 1.2;
 }
 
-/* =============================================
-   SEÇÃO FOTO WUO
-   ============================================= */
+/*SEÇÃO FOTO WUO*/
 
 .wuo-segurando-queijo {
     display: flex; /* ← faltou */
@@ -265,9 +251,7 @@ img {
         border-radius: 10px;
     }
 
-/* =============================================
-   SEÇÃO SOBRE
-   ============================================= */
+/*SEÇÃO SOBRE*/
 
 .sobre-produto-grupo {
     display: flex;
@@ -297,9 +281,7 @@ img {
 }
 
 
-/* =============================================
-   SEPARADOR
-   ============================================= */
+/*SEPARADOR*/
 
 .separador {
     width: 80%;
@@ -308,9 +290,7 @@ img {
     background-color: #e0e0e0;
 }
 
-/* =============================================
-   RESPONSIVIDADE — TABLET (max 900px)
-   ============================================= */
+/*RESPONSIVIDADE — TABLET (max 900px)*/
 
 @media (max-width: 900px) {
     nav {
@@ -333,9 +313,7 @@ img {
     }
 }
 
-/* =============================================
-   RESPONSIVIDADE — MOBILE (max 600px)
-   ============================================= */
+/*RESPONSIVIDADE — MOBILE (max 600px)*/
 
 @media (max-width: 600px) {
 
@@ -418,6 +396,4 @@ img {
 }
 
 
-/* =============================================
-   Tela de login
-   ============================================= */
+/*Tela de login*/
