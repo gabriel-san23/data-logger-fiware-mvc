@@ -15,7 +15,7 @@ namespace DataLogger.DAO
             client.DefaultRequestHeaders.Add("fiware-service", "smart");
             client.DefaultRequestHeaders.Add("fiware-servicepath", "/");
 
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(60);
             return client;
 
         }
@@ -94,6 +94,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:4041/iot/services";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -119,6 +120,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:4041/iot/services/?resource=&apikey=TEF";
                     var response = await client.DeleteAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -145,6 +147,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:4041/iot/devices";
 
                     var body = new
@@ -194,6 +197,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:4041/iot/devices";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -217,6 +221,7 @@ namespace DataLogger.DAO
         {
             try
             {
+                string serverIp_correto = serverIp.Trim();
                 using (var client = CriaClienteFiware())
                 {
                     string url = $"http://{serverIp}:1026/v2/entities/{entityName}/attrs/luminosity";
@@ -244,6 +249,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:1026/v2/entities/{entityName}/attrs/temperature";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -269,6 +275,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:1026/v2/entities/{entityName}/attrs/humidity";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -294,6 +301,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:4041/iot/devices/{deviceId}";
                     var response = await client.DeleteAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -319,6 +327,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:8666/version";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();
@@ -343,6 +352,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:1026/v2/subscriptions";
 
                     var body = new
@@ -389,6 +399,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/{entityName}/attributes/luminosity?lastN={lastN}";
 
                     var response = await client.GetAsync(url);
@@ -414,6 +425,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/{entityName}/attributes/temperature?lastN={lastN}";
 
                     var response = await client.GetAsync(url);
@@ -437,6 +449,7 @@ namespace DataLogger.DAO
         {
             try
             {
+                string serverIp_correto = serverIp.Trim();
                 using (var client = CriaClienteFiware())
                 {
                     string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/{entityName}/attributes/humidity?lastN={lastN}";
@@ -465,6 +478,7 @@ namespace DataLogger.DAO
             {
                 using (var client = CriaClienteFiware())
                 {
+                    string serverIp_correto = serverIp.Trim();
                     string url = $"http://{serverIp}:1026/version";
                     var response = await client.GetAsync(url);
                     string corpo = await response.Content.ReadAsStringAsync();

@@ -124,12 +124,12 @@ namespace DataLogger.Controllers
 
         private async Task GaranteSubscricao(string serverIp, string entityName)
         {
-            string chave = $"{serverIp}_{entityName}";
-            if (!_subscricoesFeitas.ContainsKey(chave) || !_subscricoesFeitas[chave])
-            {
+            //string chave = $"{serverIp}_{entityName}";
+            //if (!_subscricoesFeitas.ContainsKey(chave) || !_subscricoesFeitas[chave])
+            //{
                 await _fiwareServices.SubscribeParameters(serverIp, entityName);
-                _subscricoesFeitas[chave] = true;
-            }
+            //    _subscricoesFeitas[chave] = true;
+            //}
         }
 
         private void SalvarDadosDoFiwareNoBanco(string jsonFiware, int idDispositivo, string tipoAtributo)
