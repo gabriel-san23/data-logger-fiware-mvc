@@ -10,9 +10,9 @@ using DataLogger.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using System.Xml.Linq;
+using DataLogger.DAO;
 
 namespace DataLogger.Controllers
 {
@@ -20,13 +20,20 @@ namespace DataLogger.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly FiwareServices _fiwareServices;
+
+        private static System.Collections.Generic.Dictionary<string, bool> _subscricoesFeitas 
+            = new System.Collections.Generic.Dictionary<string, bool>();
+
+        public HomeController(ILogger<HomeController> logger, FiwareServices fiwareServices)
         {
             _logger = logger;
+            _fiwareServices = fiwareServices;
         }
-        //TESTE
+     
         public IActionResult Index()
         {
+            ViewBag.Logado = HelperControllers.VerificaUserLogado(HttpContext.Session);
             return View();
         }
 
@@ -41,477 +48,146 @@ namespace DataLogger.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private HttpClient CriaClienteFiware()
-        {
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("fiware-service", "smart");
-            client.DefaultRequestHeaders.Add("fiware-servicepath", "/");
-            client.Timeout = TimeSpan.FromSeconds(10);
-            return client;
-
-        }
-
-        //IOT AGENT - HEALTH CHECK
-        public async Task<IActionResult> HealthCheckIOTAgent(string serverIp)
+        public async Task<IActionResult> historicoLuminosidade(string serverIp, int idDispositivo, int lastN = 30)
         {
             try
             {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:4041/iot/about";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
+                var dispositivoDAO = new DispositivoDAO();
+                var dispositivo = dispositivoDAO.Consulta(idDispositivo);
 
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
+                if (dispositivo == null)
+                    return Content(JsonSerializer.Serialize(new { sucesso = false, dados = "Dispositivo não encontrado" }), "application/json");
+
+                await GaranteSubscricao(serverIp, dispositivo.FiwareEntityName);
+
+                var historico = await _fiwareServices.RequestLuminosity(serverIp, dispositivo.FiwareEntityName, lastN);
+
+                SalvarDadosDoFiwareNoBanco(historico, idDispositivo, "luminosity");
+
+                return Content(historico, "application/json");
+            }
+            catch (Exception ex) 
+            { 
+                return Content(JsonSerializer.Serialize(new { sucesso = false, dados = ex.Message }), "application/json");
+            }
+
+        }
+
+        public async Task<IActionResult> historicoTemperatura(string serverIp, int idDispositivo, int lastN = 30)
+        {
+            try
+            {
+                var dispositivoDAO = new DispositivoDAO();
+                var dispositivo = dispositivoDAO.Consulta(idDispositivo);
+
+                if (dispositivo == null)
+                    return Content(JsonSerializer.Serialize(new { sucesso = false, dados = "Dispositivo não encontrado" }), "application/json");
+
+                await GaranteSubscricao(serverIp, dispositivo.FiwareEntityName);
+
+                var historico = await _fiwareServices.RequestTemperature(serverIp, dispositivo.FiwareEntityName, lastN);
+
+                SalvarDadosDoFiwareNoBanco(historico, idDispositivo, "temperature");
+
+                return Content(historico, "application/json");
             }
             catch (Exception ex)
             {
-                return Json(new { sucesso = false, dados = ex.Message });
+                return Content(JsonSerializer.Serialize(new { sucesso = false, dados = ex.Message }), "application/json");
             }
         }
 
-        //IOT AGENT - PROVENDO UM GRUPO DE SERVIÇOS PARA O MQTT
-        public async Task<IActionResult> ProvendoGrupoMQTT(string serverIp)
+        public async Task<IActionResult> historicoHumidade(string serverIp, int idDispositivo, int lastN = 30)
         {
+
             try
             {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:4041/iot/services";
+                var dispositivoDAO = new DispositivoDAO();
+                var dispositivo = dispositivoDAO.Consulta(idDispositivo);
 
-                    var body = new
-                    {   
-                        services = new[]
-                        {
-                            new
-                            {
-                                apikey = "TEF",
-                                cbroker = $"http://{serverIp}:1026",
-                                entity_type = "Thing",
-                                resource = ""
-                            }                            
-                        }
-                    };
+                if (dispositivo == null)
+                    return Content(JsonSerializer.Serialize(new { sucesso = false, dados = "Dispositivo não encontrado" }), "application/json");
 
-                    string json = JsonSerializer.Serialize(body);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(url, content);
-                    string corpo = await response.Content.ReadAsStringAsync();
+                await GaranteSubscricao(serverIp, dispositivo.FiwareEntityName);
 
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {                
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
+                var historico = await _fiwareServices.RequestHumidity(serverIp, dispositivo.FiwareEntityName, lastN);
 
-        //IOT AGENT - HEALTH CHECK SERVICES
-        public async Task<IActionResult> HealthCheckServices(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:4041/iot/services";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
+                SalvarDadosDoFiwareNoBanco(historico, idDispositivo, "humidity");
 
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
+                return Content(historico, "application/json");
             }
             catch (Exception ex)
             {
-                return Json(new { sucesso = false, dados = ex.Message });
+                return Content(JsonSerializer.Serialize(new { sucesso = false, dados = ex.Message }), "application/json");
             }
         }
 
-        //IOT AGENT - DELETAR UM GRUPO DE SERVIÇOS
-        public async Task<IActionResult> DeletarGrupoSevicos(string serverIp)
+        private async Task GaranteSubscricao(string serverIp, string entityName)
+        {
+            //string chave = $"{serverIp}_{entityName}";
+            //if (!_subscricoesFeitas.ContainsKey(chave) || !_subscricoesFeitas[chave])
+            //{
+                await _fiwareServices.SubscribeParameters(serverIp, entityName);
+            //    _subscricoesFeitas[chave] = true;
+            //}
+        }
+
+        private void SalvarDadosDoFiwareNoBanco(string jsonFiware, int idDispositivo, string tipoAtributo)
         {
             try
             {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:4041/iot/services/?resource=&apikey=TEF";
-                    var response = await client.DeleteAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(jsonFiware);
 
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
+                var root = doc.RootElement;
+
+                if (root.TryGetProperty("sucesso", out var sucesso) && !sucesso.GetBoolean())
+                    return; // Fiware retornou erro, não salva nada
+
+                if (!root.TryGetProperty("dados", out var dadosElement))
+                    return;
+
+                string dadosJson = dadosElement.GetString();
+                if (string.IsNullOrEmpty(dadosJson))
+                    return;
+
+                using var dadosDoc = JsonDocument.Parse(dadosJson);
+                var dadosRoot = dadosDoc.RootElement;
+
+                var contextResponses = dadosRoot.GetProperty("contextResponses");
+                var primeiroResponse = contextResponses[0];
+                var contextElement = primeiroResponse.GetProperty("contextElement");
+                var attributes = contextElement.GetProperty("attributes");
+                var primeiroAttr = attributes[0];
+                var valores = primeiroAttr.GetProperty("values");
+
+                if (valores.GetArrayLength() == 0)
+                    return;
+
+                var ultimoValor = valores[valores.GetArrayLength() - 1];
+                string attrValue = ultimoValor.GetProperty("attrValue").GetString();
+
+                var registroDAO = new RegistroDAO();
+
+                int umidade = 0, luminosidade = 0;
+                decimal temperatura = 0;
+
+                if (tipoAtributo == "humidity" && int.TryParse(attrValue, out int u))
+                    umidade = u;
+                else if (tipoAtributo == "luminosity" && int.TryParse(attrValue, out int l))
+                    luminosidade = l;
+                else if (tipoAtributo == "temperature" && decimal.TryParse(attrValue,
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture, out decimal t))
+                    temperatura = t;
+
+                registroDAO.SalvarRegistro(idDispositivo, umidade, luminosidade, temperatura);
             }
             catch (Exception ex)
             {
-                return Json(new { sucesso = false, dados = ex.Message });
+                // Loga o erro mas não interrompe a resposta para o front-end
+                _logger.LogError($"Erro ao salvar dados no banco: {ex.Message}");
             }
         }
 
-        //IOT AGENT - PROVENDO UM DATA LOGGER
-        public async Task<IActionResult> ProverDataLogger(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:4041/iot/devices";
-
-                    var body = new
-                    {
-                        devices = new[]
-                        {
-                            new
-                            {
-                                device_id = "datalogger001", //id variável
-                                entity_name = "urn:ngsi-ld:DataLogger:001", //id variável
-                                entity_type = "DataLogger",
-                                protocol = "PDI-IoTA-UltraLight",
-                                transport = "MQTT",
-                                attributes = new[]
-                                {
-                                    new { object_id = "l", name = "luminosity", type = "Integer" },
-                                    new { object_id = "t", name = "temperature", type = "Float" },
-                                    new { object_id = "h", name = "humidity", type = "Integer" }
-                                }
-                            }
-                        }
-                    };
-
-                    string json = JsonSerializer.Serialize(body);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(url, content);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        //IOT AGENT - LISTAR DISPOSITIVOS
-        public async Task<IActionResult> ListarDispositivos(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:4041/iot/devices";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        //IOT AGENT - RESULT OF DATA LOGGER LUMINOSITY
-        public async Task<IActionResult> ResultadoLuminosidadeDataLogger(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:1026/v2/entities/urn:ngsi-ld:DataLogger:001/attrs/luminosity";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        //IOT AGENT - RESULT OF DATA LOGGER TEMPERATURE
-        public async Task<IActionResult> ResultadoTemperaturaDataLogger(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:1026/v2/entities/urn:ngsi-ld:DataLogger:001/attrs/temperature";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        //IOT AGENT - RESULT OF DATA LOGGER HUMIDITY
-        public async Task<IActionResult> ResultadoHumidadeDataLogger(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:1026/v2/entities/urn:ngsi-ld:DataLogger:001/attrs/humidity";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        //IOT AGENT - DELETE DATA LOGGER IN IOT AGENT
-        public async Task<IActionResult> DeletarDispositivoIOT(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:4041/iot/devices/datalogger001";
-                    var response = await client.DeleteAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        //STH COMET - HEALTH CHECK
-        public async Task<IActionResult> HealthCheckSTHComet(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:8666/version";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        // STH COMET - RECEBE DADOS
-        private async Task<IActionResult> SubscribeParameters(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:1026/v2/subscriptions";
-
-                    var body = new
-                    {
-                        description = "Notifica o STH Comet de todas as mudanças de parâmetros",
-                        subject = new
-                        {
-                            entities = new[]
-                            {
-                                new { id = "urn:ngsi-ld:DataLogger:001", type = "DataLogger" }
-                            },
-                            condition = new { attrs = new[] { "luminosity", "temperature", "humidity" } }
-                        },
-                        notification = new
-                        {
-                            http = new { url = $"http://{serverIp}:8666/notify" },
-                            attrs = new[] { "luminosity", "temperature", "humidity" },
-                            attrFormat = "legacy"
-                        }
-                    };
-
-                    string json = JsonSerializer.Serialize(body);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await client.PostAsync(url, content);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        private async Task<IActionResult> RequestLuminosity(string serverIp, int lastN = 30)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/urn:ngsi-ld:DataLogger:001/attributes/luminosity?lastN={lastN}";
-
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        private async Task<IActionResult> RequestTemperature(string serverIp, int lastN = 30)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/urn:ngsi-ld:DataLogger:001/attributes/temperature?lastN={lastN}";
-
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        private async Task<IActionResult> RequestHumidity(string serverIp, int lastN = 30)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:8666/STH/v1/contextEntities/type/DataLogger/id/urn:ngsi-ld:DataLogger:001/attributes/humidity?lastN={lastN}";
-
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { sucesso = false, dados = ex.Message });
-            }
-        }
-
-        //ORION - PEGAR VERSÃO
-        public async Task<IActionResult> HealthCheckOrion(string serverIp)
-        {
-            try
-            {
-                using (var client = CriaClienteFiware())
-                {
-                    string url = $"http://{serverIp}:1026/version";
-                    var response = await client.GetAsync(url);
-                    string corpo = await response.Content.ReadAsStringAsync();
-
-                    return Json(new
-                    {
-                        sucesso = response.IsSuccessStatusCode,
-                        status = (int)response.StatusCode,
-                        dados = corpo
-                    });
-                }
-            }
-            catch (Exception erro)
-            {
-                return Json(new { sucesso = false, dados = erro.Message });
-            }
-        }
     }
 }

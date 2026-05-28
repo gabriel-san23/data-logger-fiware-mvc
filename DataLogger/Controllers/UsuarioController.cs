@@ -13,6 +13,7 @@ namespace DataLogger.Controllers
         {
             DAO = new UsuarioDAO();
             GeraProximoId = true;
+            ExigeAutenticacao = false;
         }
 
         protected override void PreencheDadosParaView(string Operacao, UsuarioViewModel model)

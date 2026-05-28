@@ -129,6 +129,7 @@ create table tbDispositivos (
 */
 go
 CREATE OR ALTER PROCEDURE spInsert_tbDISPOSITIVOS(
+	@ID_DISPOSITIVO INT,
 	@DESCRICAO VARCHAR(100),
 	@ID_USUARIO INT
 )
@@ -143,7 +144,8 @@ GO
 
 CREATE OR ALTER PROCEDURE spUpdate_tbDISPOSITIVOS(
 	@ID_DISPOSITIVO INT,
-	@DESCRICAO VARCHAR(100)
+	@DESCRICAO VARCHAR(100),
+	@ID_USUARIO INT
 )
 AS
 BEGIN
@@ -190,4 +192,11 @@ GO
 SELECT * FROM tbusuarios
 SELECT * FROM tbDispositivos
 SELECT * FROM tbRegistros
+*/
+
+-- View para dispositivos
+/*
+SELECT d.id, d.descricao, d.idUsuario, u.nomeUsuario
+FROM tbDispositivos d
+INNER JOIN tbUsuarios u ON d.idUsuario = u.id
 */

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<DataLogger.Models.DispositivoViewModel>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Meus Dispositivos";
+}
+
+<h2>Meus Dispositivos</h2>
+<a href="/Dispositivo/Create" class="btn btn-success mb-3">+ Novo Dispositivo</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome do Dispositivo</th>
+            <th>ID no Fiware</th>
+            <th>Dono</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model)
+        {
+            <tr>
+                <td>@d.Id</td>
+                <td>@d.Descricao</td>
+                <td>@d.FiwareDeviceId</td>
+                <td>@d.NomeUsuario</td>
+                <td>
+                    <a href="/Dispositivo/Edit/@d.Id" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="/Dispositivo/Delete/@d.Id" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Confirma exclusão do dispositivo @d.Descricao?')">Excluir</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
