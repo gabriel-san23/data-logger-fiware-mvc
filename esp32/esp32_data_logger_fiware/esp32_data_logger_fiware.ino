@@ -35,7 +35,7 @@ const int SDA_DHT = 32;
 #define DHTTYPE DHT11
 DHT dht(SDA_DHT, DHTTYPE);
 
-// Variáveis de Áudio (Comentadas)
+// Variáveis de Áudio
 const int busyPin = 4;
 const int rxPin = 16;
 const int txPin = 17;
@@ -81,7 +81,7 @@ void setup() {
   Serial.begin(115200);
   dht.begin();
 
-  // initMP3();
+  initMP3();
   initWiFi();
   initMQTT();
   

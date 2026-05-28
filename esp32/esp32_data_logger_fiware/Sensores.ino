@@ -7,8 +7,8 @@ void readAndPublishSensors() {
   //validação
   if (isnan(temperatura) || isnan(umidade)) {
     Serial.println("Erro: Falha DHT");
-    // myDFPlayer.playFolder(6, 8); 
-    // aguardarAudio();
+    myDFPlayer.playFolder(6, 8); 
+    aguardarAudio();
     return;
   }
 
