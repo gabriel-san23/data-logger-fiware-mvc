@@ -15,7 +15,7 @@ namespace DataLogger.DAO
             client.DefaultRequestHeaders.Add("fiware-service", "smart");
             client.DefaultRequestHeaders.Add("fiware-servicepath", "/");
 
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(60);
             return client;
 
         }
