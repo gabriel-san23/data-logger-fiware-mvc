@@ -7,7 +7,7 @@ PBL LP1 SE - N2 2BIM
  
 ### Programação do ESP32
 * Responsável: Oliver
-* Link do Wokwi: https://wokwi.com/projects/464405759673556993
+* Link do Wokwi: https://wokwi.com/projects/465049136118667265
 
 1. Sistema Fiware
 2. DFPlayer e Speaker
