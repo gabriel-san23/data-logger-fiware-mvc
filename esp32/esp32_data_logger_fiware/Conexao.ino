@@ -36,11 +36,11 @@ void reconnectMQTT() {
       MQTT.subscribe(TOPICO_SUBSCRIBE);
       Serial.println("");
       Serial.println("Conectado ao sistema FIWARE!");
-      //myDFPlayer.playFolder(1, 3); 
-      //aguardarAudio();
+      myDFPlayer.playFolder(1, 3);
+      aguardarAudio();
     } else {
-      //myDFPlayer.playFolder(1, 4); 
-      //aguardarAudio();
+      myDFPlayer.playFolder(1, 4);
+      aguardarAudio();
       Serial.print(".");
       delay(2000);
     }

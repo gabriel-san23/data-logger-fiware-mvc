@@ -1,4 +1,3 @@
-/*
 void aguardarAudio() {
   delay(70);
   while (digitalRead(busyPin) == LOW) {
@@ -77,4 +76,3 @@ void falarGrandezas() {
   myDFPlayer.playFolder(5, 5);
   aguardarAudio();
 }
-*/

@@ -36,12 +36,12 @@ const int SDA_DHT = 32;
 DHT dht(SDA_DHT, DHTTYPE);
 
 // Variáveis de Áudio (Comentadas)
-// const int busyPin = 4;
-// const int rxPin = 16;
-// const int txPin = 17;
-// const int default_audioVolume = 30;
-// HardwareSerial myHardwareSerial(2);
-// DFRobotDFPlayerMini myDFPlayer;
+const int busyPin = 4;
+const int rxPin = 16;
+const int txPin = 17;
+const int default_audioVolume = 30;
+HardwareSerial myHardwareSerial(2);
+DFRobotDFPlayerMini myDFPlayer;
 
 float temperatura = 0;
 float umidade = 0;
@@ -85,8 +85,8 @@ void setup() {
   initWiFi();
   initMQTT();
   
-  // myDFPlayer.playFolder(6, 5);
-  // aguardarAudio();
+  myDFPlayer.playFolder(6, 5);
+  aguardarAudio();
 
   Serial.println();
   Serial.println("------ Leitura dos Sensores ------");
@@ -107,7 +107,7 @@ void loop() {
   }
 
   if (tempoAtual - tempoAnteriorAudio >= intervaloAudio) {    
-    // falarGrandezas();     
+    falarGrandezas();
     tempoAnteriorAudio = millis(); 
   }
   delay(10);
