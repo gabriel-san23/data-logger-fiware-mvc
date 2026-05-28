@@ -43,10 +43,27 @@ const int default_audioVolume = 30;
 HardwareSerial myHardwareSerial(2);
 DFRobotDFPlayerMini myDFPlayer;
 
+// --- LIMIARES DE ALERTA (TRIGGERS) ---
+const float TEMP_MAX = 35.0;       // Temperatura máxima tolerada
+const float TEMP_MIN = 15.0;       // Temperatura mínima tolerada
+const int UMIDADE_MIN = 30;    // Umidade mínima aceitável
+const int LUMINOSIDADE_MIN = 5;  // Nível de luz considerado muito escuro
+
 float temperatura = 0;
 float umidade = 0;
 int luminosidade = 0;
 
+// --- FLAGS DA FILA DE ÁUDIO ---
+bool tocarAudioTemp = false;
+bool tocarAudioUmid = false;
+bool tocarAudioLum = false;
+
+// --- MEMÓRIA DE ESTADO DOS ALERTAS ---
+bool alarmeTempAtivo = false;
+bool alarmeUmidAtivo = false;
+bool alarmeLumAtivo = false;
+
+// --- TEMPOS DA FUNÇÃO MILLIS() ---
 unsigned long tempoAnteriorTelemetria = 0;
 const unsigned long intervaloTelemetria = 2000; // 2 segundos para o FIWARE/LCD
 
@@ -106,9 +123,8 @@ void loop() {
     printSensorValues(); // exibe valores no Serial Monitor e no Display LCD
   }
 
-  if (tempoAtual - tempoAnteriorAudio >= intervaloAudio) {    
-    falarGrandezas();
-    tempoAnteriorAudio = millis(); 
-  }
+  // Chama o gerenciador de áudio a cada volta do loop
+  gerenciarFilaDeAudio();
+
   delay(10);
 }
