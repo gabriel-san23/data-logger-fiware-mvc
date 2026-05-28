@@ -12,6 +12,15 @@ body {
     background-color: white;
 }
 
+p {
+    font-family: 'Inter', sans-serif;
+    color: #6c6c6c;
+    font-weight: 630;
+    font-size: clamp(16px, 2vw, 23px); /* escala automática */
+    max-width: 400px;
+    line-height: 1.4;
+}
+
 /* =============================================
    HEADER / NAV
    ============================================= */
@@ -19,7 +28,7 @@ body {
 header {
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100%
 }
 
 nav {
@@ -33,7 +42,7 @@ nav {
     color: #808080;
     flex-wrap: wrap; /* evita overflow em telas estreitas */
     gap: 12px;
-    background-color: #383838;
+    background-color: #282828;
 }
 
     nav img {
@@ -43,11 +52,14 @@ nav {
 
     nav a {
         text-decoration: none;
-        color: #383838;
+        color: #b6b6b6;     
+        font-weight: 380;
+        font-size: clamp(10px, 2vw, 12px);
+        line-height: 2.4;
     }
 
         nav a:hover {
-            color: #0a0a0a;
+            color: white;
         }
 
 /* Nav mobile: hambúrguer via checkbox — sem JS */
@@ -112,20 +124,21 @@ h2.normal {
     color: #282828;
 }
 
+h3.normal {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(17px, 3vw, 40px); /* escala automática */
+    font-weight: 500;
+    line-height: 1.2;
+    max-width: 900px;
+    color: #282828;
+}
+
 strong {
     font-family: 'Inter', sans-serif;
     color: rgb(29, 29, 31);
     font-weight: 800;
 }
 
-p {
-    font-family: 'Inter', sans-serif;
-    color: #6c6c6c;
-    font-weight: 630;
-    font-size: clamp(16px, 2vw, 23px); /* escala automática */
-    max-width: 400px;
-    line-height: 1.4;
-}
 
 /* =============================================
    IMAGENS (regra global)
@@ -175,14 +188,15 @@ img {
     gap: 60px;
     padding: 60px;
     margin-bottom: 100px;
+    flex-direction: row-reverse;
 }
 
     .apresenta-produto img {
         width: 500px;
-        max-width: 100%;
+        max-width: 70%;
         height: auto;
         object-fit: cover;
-        border-radius: 10px;
+        margin-left: 0;
     }
 
     .apresenta-produto-texto {
