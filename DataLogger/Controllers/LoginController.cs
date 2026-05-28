@@ -40,6 +40,7 @@ namespace DataLogger.Controllers
                     HttpContext.Session.SetString("Logado", "true");
                     HttpContext.Session.SetString("NomeUsuario", model.NomeUsuario);
                     HttpContext.Session.SetInt32("IdUsuario", model.Id);
+                    HttpContext.Session.SetString("TipoUsuario", model.TipoUsuario);
 
                     return RedirectToAction("index", "home");
                 }

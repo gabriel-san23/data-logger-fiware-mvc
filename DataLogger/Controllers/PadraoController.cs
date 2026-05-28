@@ -1,5 +1,6 @@
 ﻿using DataLogger.DAO;
 using DataLogger.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -22,6 +23,7 @@ namespace DataLogger.Controllers
             else
             {                
                 ViewBag.Logado = true;
+                ViewBag.TipoUsuario = HttpContext.Session.GetString("TipoUsuario");
                 base.OnActionExecuting(context);
             }
         }

@@ -8,10 +8,13 @@ namespace DataLogger.Controllers
 {
     public class DispositivoController : PadraoController<DispositivoViewModel>
     {
-        public DispositivoController()
+        private readonly FiwareServices _fiwareServices;
+
+        public DispositivoController(FiwareServices fiwareServices)
         {
             DAO = new DispositivoDAO();
             GeraProximoId = false;
+            _fiwareServices = fiwareServices;
         }
 
         protected override void PreencheDadosParaView(string Operacao, DispositivoViewModel model)
@@ -30,6 +33,9 @@ namespace DataLogger.Controllers
 
             if (string.IsNullOrEmpty(model.Descricao))
                 ModelState.AddModelError("Descricao", "Informe a descrição do dispositivo.");
+
+            if (operacao == "I" && string.IsNullOrEmpty(model.ServerIp))
+                ModelState.AddModelError("ServerIp", "Informe o IP do servidor.");
 
             if (model.IdUsuario <= 0)
                 ModelState.AddModelError("IdUsuario", "Usuário inválido.");
@@ -72,14 +78,20 @@ namespace DataLogger.Controllers
                     PreencheDadosParaView(Operacao, model);
                     return View(NomeViewForm, model);
                 }
+                
+                if (Operacao == "I")
+                {
+                    int novoId = DAO.Insert(model);
+                    model.Id = novoId;
+
+                    _fiwareServices.ProverDataLogger(model.ServerIp, model.FiwareDeviceId, model.FiwareEntityName).GetAwaiter().GetResult();
+                }
                 else
                 {
-                    if (Operacao == "I")
-                        DAO.Insert(model);
-                    else
-                        DAO.Update(model);
-                    return RedirectToAction(NomeViewIndex);
+                    DAO.Update(model);
                 }
+
+                return RedirectToAction(NomeViewIndex);
             }
             catch (Exception erro)
             {
