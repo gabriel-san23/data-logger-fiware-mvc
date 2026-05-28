@@ -3,7 +3,7 @@
 #include <DHT.h>
 #include <Wire.h>
 #include <PubSubClient.h>
-// #include "DFRobotDFPlayerMini.h"
+#include "DFRobotDFPlayerMini.h"
 
 // Parâmetros informados pelo usuário
 const char* default_SSID = "Wokwi-GUEST";
@@ -32,7 +32,7 @@ const int SDA_LCD = 25;
 const int SCL_LCD = 26;
 
 const int SDA_DHT = 32;
-#define DHTTYPE DHT22
+#define DHTTYPE DHT11
 DHT dht(SDA_DHT, DHTTYPE);
 
 // Variáveis de Áudio (Comentadas)
@@ -78,7 +78,7 @@ void setup() {
   digitalWrite(EMBEDDED_LED, LOW);
 
   initDisplayLCD();
-  Serial.begin(9600);
+  Serial.begin(115200);
   dht.begin();
 
   // initMP3();
