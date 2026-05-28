@@ -12,13 +12,11 @@
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">DataLogger</a>
-
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-
                         @if (ViewBag.Logado == true)
                         {
                             <li class="nav-item">
@@ -27,6 +25,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Dispositivo" asp-action="Index">Dispositivos</a>
                             </li>
+                            @if (ViewBag.TipoUsuario == "admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Admin">Admin</a>
+                                </li>
+                            }
                             <li class="nav-item">
                                 <a class="nav-link text-dark text-danger" asp-controller="Login" asp-action="LogOff">Sair</a>
                             </li>
@@ -42,19 +46,16 @@
             </div>
         </nav>
     </header>
-
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2026 - DataLogger - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

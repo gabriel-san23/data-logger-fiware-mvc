@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Painel Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Painel Admin - Fiware</h2>
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label>IP do Servidor:</label>
+        <input type="text" id="adminServerIp" class="form-control" placeholder="Ex: 123.456.789.0" />
+    </div>
+</div>
+
+<div class="mb-3">
+    <button class="btn btn-secondary mr-1" onclick="chamarAdmin('healthOrion')">Health Check Orion</button>
+    <button class="btn btn-secondary mr-1" onclick="chamarAdmin('healthIOT')">Health Check IOT Agent</button>
+    <button class="btn btn-secondary mr-1" onclick="chamarAdmin('healthServices')">Health Check Services</button>
+    <button class="btn btn-secondary mr-1" onclick="chamarAdmin('healthSTH')">Health Check STH Comet</button>
+    <button class="btn btn-secondary mr-1" onclick="chamarAdmin('listarDispositivos')">Listar Dispositivos</button>
+    <button class="btn btn-warning mr-1" onclick="chamarAdmin('provendoGrupoMQTT')">Provisionar Grupo MQTT</button>
+    <button class="btn btn-danger mr-1" onclick="chamarAdmin('deletarGrupo')">Deletar Grupo Serviços</button>
+</div>
+
+<div>
+    <label>Resposta:</label>
+    <textarea id="adminResposta" class="form-control" rows="15" readonly></textarea>
+</div>
+
+@section Scripts {
+    <script>
+        function chamarAdmin(acao) {
+            var serverIp = $("#adminServerIp").val();
+            if (!serverIp) {
+                alert("Preencha o IP do servidor.");
+                return;
+            }
+
+            $("#adminResposta").val("Aguardando...");
+
+            $.ajax({
+                type: "GET",
+                url: "/Home/AdminAction",
+                data: { serverIp: serverIp, acao: acao },
+                success: function (resposta) {
+                    var obj = typeof resposta === "string" ? JSON.parse(resposta) : resposta;
+                    $("#adminResposta").val(JSON.stringify(obj, null, 2));
+                },
+                error: function () {
+                    $("#adminResposta").val("Erro na requisição.");
+                }
+            });
+        }
+    </script>
+}

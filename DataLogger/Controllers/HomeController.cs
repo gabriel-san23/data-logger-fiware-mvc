@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using System.Xml.Linq;
 using DataLogger.DAO;
+using Microsoft.AspNetCore.Http;
 
 namespace DataLogger.Controllers
 {
@@ -34,6 +35,7 @@ namespace DataLogger.Controllers
         public IActionResult Index()
         {
             ViewBag.Logado = HelperControllers.VerificaUserLogado(HttpContext.Session);
+            ViewBag.TipoUsuario = HttpContext.Session.GetString("TipoUsuario");
             return View();
         }
 
@@ -47,6 +49,39 @@ namespace DataLogger.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        //Controles Admin
+
+        public IActionResult Admin()
+        {
+            if (HttpContext.Session.GetString("TipoUsuario") != "admin")
+                return RedirectToAction("Index");
+            ViewBag.Logado = true;
+            ViewBag.TipoUsuario = "admin";
+            return View();
+        }
+
+        public async Task<IActionResult> AdminAction(string serverIp, string acao)
+        {
+            if (HttpContext.Session.GetString("TipoUsuario") != "admin")
+                return Content(JsonSerializer.Serialize(new { sucesso = false, dados = "Acesso negado" }), "application/json");
+
+            string resultado = acao switch
+            {
+                "healthOrion" => await _fiwareServices.HealthCheckOrion(serverIp),
+                "healthIOT" => await _fiwareServices.HealthCheckIOTAgent(serverIp),
+                "healthServices" => await _fiwareServices.HealthCheckServices(serverIp),
+                "healthSTH" => await _fiwareServices.HealthCheckSTHComet(serverIp),
+                "listarDispositivos" => await _fiwareServices.ListarDispositivos(serverIp),
+                "provendoGrupoMQTT" => await _fiwareServices.ProvendoGrupoMQTT(serverIp),
+                "deletarGrupo" => await _fiwareServices.DeletarGrupoSevicos(serverIp),
+                _ => JsonSerializer.Serialize(new { sucesso = false, dados = "Ação desconhecida" })
+            };
+
+            return Content(resultado, "application/json");
+        }
+
+        //Histórico Sensores
 
         public async Task<IActionResult> historicoLuminosidade(string serverIp, int idDispositivo, int lastN = 30)
         {
