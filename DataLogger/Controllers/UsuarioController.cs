@@ -28,9 +28,14 @@ namespace DataLogger.Controllers
 
         protected override void ValidaDados(UsuarioViewModel model, string operacao)
         {
+            var usuarioDAO = (UsuarioDAO)DAO;  // Cast (conversão explicita)
+
             base.ValidaDados(model, operacao);
             if (string.IsNullOrEmpty(model.NomeUsuario))
                 ModelState.AddModelError("NomeUsuario", "Preencha o nome de usuário.");
+
+            if (usuarioDAO.ConsultaPorNome(model.NomeUsuario) != null)
+                ModelState.AddModelError("NomeUsuario", "Este nome de usuário já existe.");
 
             if (string.IsNullOrEmpty(model.SenhaUsuario))
                 ModelState.AddModelError("SenhaUsuario", "Preencha a senha.");
