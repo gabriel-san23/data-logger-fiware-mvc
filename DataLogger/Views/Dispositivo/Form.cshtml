@@ -1,0 +1,32 @@
+﻿@model DataLogger.Models.DispositivoViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Cadastro de Dispositivo";
+}
+
+<h2>Cadastro de Dispositivo</h2>
+
+<form action="Save" method="post" class="col-md-5">
+    <input type="hidden" name="Operacao" value="@ViewBag.Operacao" />
+    <input type="hidden" asp-for="IdUsuario" />
+
+    @if (ViewBag.Operacao == "A")
+    {
+        <label class="control-label">Código (ID):</label>
+        <input asp-for="Id" class="form-control" readonly />
+        <br />
+        <label class="control-label">ID no Fiware:</label>
+        <input value="@Model.FiwareDeviceId" class="form-control" readonly />
+        <small class="text-muted">Gerado automaticamente a partir do ID no banco.</small>
+        <br />
+    }
+
+    <label asp-for="Descricao" class="control-label">Nome do Dispositivo:</label>
+    <input asp-for="Descricao" class="form-control" placeholder="Ex: Sensor da Estufa 1" />
+    <span asp-validation-for="Descricao" class="text-danger"></span>
+    <br />
+
+    <input type="submit" value="Salvar" class="btn btn-info" />
+    &nbsp;
+    <a href="/Dispositivo" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -41,12 +41,29 @@ namespace DataLogger.DAO
                         string sql = "select isnull(@@IDENTITY,0)";
                         comando.CommandType = CommandType.Text;
                         comando.CommandText = sql;
-                        int pedidoId = Convert.ToInt32(comando.ExecuteScalar());
+                        int id = Convert.ToInt32(comando.ExecuteScalar());
                         conexao.Close();
-                        return pedidoId;
+                        return id;
                     }
                     else
                         return 0;
+                }
+            }
+        }
+
+        public static DataTable ExecutaSqlSelect(string sql, SqlParameter[] parametros)
+        {
+            using (SqlConnection conexao = ConexaoBD.GetConexao())
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conexao))
+                {
+                    adapter.SelectCommand.CommandType = CommandType.Text;
+                    if (parametros != null)
+                        adapter.SelectCommand.Parameters.AddRange(parametros);
+                    DataTable tabela = new DataTable();
+                    adapter.Fill(tabela);
+                    conexao.Close();
+                    return tabela;
                 }
             }
         }
