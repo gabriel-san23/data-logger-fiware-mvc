@@ -30,12 +30,13 @@
     <!-- Foto de perfil do usuário -->
     <br />
     <input type="file" name="FotoPerfil" id="FotoPerfil" onchange="exibirFotoPerfil()" class="btn btn-secondary">
+    &nbsp;
     <img id="imgPreview" src="data:image/jpeg;base64,@Model.FotoPerfilEmBase64" class="img-responsive"
          width="200">
     <span asp-validation-for="FotoPerfil" class="text-danger"></span>
 
     <!-- Concluir -->
-    <br />
+    <br /><br />
     <input type="submit" value="Salvar dados" class="btn btn-info" />
     <br />
 </form>
@@ -43,10 +44,17 @@
 <!-- Auxílio para obter a imagem selecionada -->
 <script>
     function exibirFotoPerfil() {
-        var oFReader = new FileReader();
-        oFReader.readAsDataURL(document.getElementById("FotoPerfil").files[0]);
-        oFReader.onload = function (oFREvent) {
-            document.getElementById("imgPreview").src = oFREvent.target.result;
-        };
+        var input = document.getElementById("FotoPerfil");
+        
+        // Só tenta ler se existir um arquivo
+        if (input.files && input.files[0]) {
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(input.files[0]);
+            
+            oFReader.onload = function (oFREvent) {
+                var img = document.getElementById("imgPreview");
+                img.src = oFREvent.target.result;
+            };
+        }
     }
 </script>
