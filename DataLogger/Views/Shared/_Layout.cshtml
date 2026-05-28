@@ -1,65 +1,96 @@
 ﻿<!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DataLogger</title>
+    
+    <link rel="icon" type="image/png" href="~/images/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">DataLogger</a>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @if (ViewBag.Logado == true)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Usuario" asp-action="Index">Usuários</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Dispositivo" asp-action="Index">Dispositivos</a>
-                            </li>
-                            @if (ViewBag.TipoUsuario == "admin")
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Dashboard" asp-action="Admin">Admin</a>
-                                </li>
-                            }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark text-danger" asp-controller="Login" asp-action="LogOff">Sair</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
+        <nav>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menu">&#9776;</label>
+
+            <div class="nav-links">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+                <a href="#produto">Produto</a>
+                <a href="#sobre">Sobre</a>
+
+                @if (ViewBag.Logado == true)
+                {
+                    <a asp-controller="Usuario" asp-action="Index">Usuários</a>
+                    <a asp-controller="Dispositivo" asp-action="Index">Dispositivos</a>
+                    
+                    @if (ViewBag.TipoUsuario == "admin")
+                    {
+                        <a asp-controller="Home" asp-action="Admin">Admin</a>
+                    }
+                    <a class="text-danger" asp-controller="Login" asp-action="LogOff">Sair</a>
+                }
+                else
+                {
+                    <a asp-controller="Login" asp-action="Index">Entre</a>
+                }
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - DataLogger - <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+    <footer class="rodape">
+        <div class="rodape-topo">
+            <div class="separador"></div>
+        </div>
+
+        <div class="rodape-conteudo">
+            <div class="rodape-col">
+                <span class="rodape-titulo-col">Navegação</span>
+                <a href="#produto">Produto</a>
+                <a href="#adquira">Plataforma</a>
+                <a href="#equipe">Equipe</a>
+                <a href="#sobre">Sobre</a>
+            </div>
+
+            <div class="rodape-col">
+                <span class="rodape-titulo-col">Sistema</span>
+                <span class="rodape-info">ESP32 + DHT11 + LDR</span>
+                <span class="rodape-info">FIWARE + STH-Comet</span>
+                <span class="rodape-info">MongoDB</span>
+            </div>
+
+            <div class="rodape-col">
+                <span class="rodape-titulo-col">Instituição</span>
+                <span class="rodape-info">Faculdade Engenheiro</span>
+                <span class="rodape-info">Salvador Arena</span>
+            </div>
+        </div>
+
+        <div class="rodape-base">
+            <div class="separador"></div>
+            <p class="rodape-copy">
+                Copyright &copy; @DateTime.Now.Year DataLogger. Projeto Acadêmico — 2º Bimestre.
+            </p>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
     @RenderSection("Scripts", required: false)
 </body>
 </html>
