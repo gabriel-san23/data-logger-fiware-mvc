@@ -188,12 +188,15 @@ BEGIN
 END
 GO
 
+SELECT * FROM tbUsuarios
+
 /*
-SELECT * FROM tbusuarios
 SELECT * FROM tbDispositivos
 SELECT * FROM tbRegistros
-*/
 
+UPDATE tbUsuarios SET tipoUsuario = 'admin' WHERE nomeUsuario = 'admin'
+SELECT * FROM tbUsuarios
+*/
 -- View para dispositivos
 /*
 SELECT d.id, d.descricao, d.idUsuario, u.nomeUsuario

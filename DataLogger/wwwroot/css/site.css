@@ -1,71 +1,774 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+html{
+    scroll-behavior: smooth;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+.container {
+    flex: 1;
 }
+
+p {
+    font-family: 'Inter', sans-serif;
+    color: #6c6c6c;
+    font-weight: 630;
+    font-size: clamp(16px, 2vw, 23px); /* escala automática */
+    max-width: 400px;
+    line-height: 1.4;
+}
+
+/*HEADER*/
+
+header {
+    top: 0;
+    left: 0;
+    width: 100%
+}
+
+nav {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #808080;
+    flex-wrap: wrap; /* evita overflow em telas estreitas */
+    gap: 12px;
+    background-color: #282828;
+}
+
+    nav img {
+        height: 50px;
+        width: auto;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #b6b6b6;     
+        font-weight: 380;
+        font-size: clamp(10px, 2vw, 12px);
+        line-height: 2.4;
+    }
+
+        nav a:hover {
+            color: white;
+        }
+
+/* Nav mobile: */
+.nav-toggle {
+    display: none;
+}
+
+.nav-toggle-label {
+    display: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 26px;
+    line-height: 1;
+    color: #383838;
+}
+
+/*HERO*/
+
+.hero {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+#typing-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 6vw, 60px); /* escala automática */
+    font-weight: 600;
+    color: rgb(29, 29, 31);
+    max-width: 900px;
+    line-height: 1.2;
+}
+
+/*TIPOGRAFIA*/
+
+h2.gradiente {
+    background: linear-gradient(90deg, hsla(7, 70%, 33%, 1) 0%, hsla(27, 67%, 47%, 1) 49%, hsla(32, 100%, 57%, 1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 5vw, 57px); /* escala automática */
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 900px;
+}
+
+h2.normal {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 5vw, 57px); /* escala automática */
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 900px;
+    color: #282828;
+}
+
+h3.normal {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(17px, 3vw, 40px); /* escala automática */
+    font-weight: 700;
+    line-height: 1.2;
+    max-width: 900px;
+    color: #282828;
+}
+
+strong {
+    font-family: 'Inter', sans-serif;
+    color: rgb(29, 29, 31);
+    font-weight: 800;
+}
+
+
+/*IMAGENS (regra global)*/
+
+img {
+    display: block;
+    max-width: 100%; /* nunca ultrapassa o container */
+    height: auto;
+    object-fit: cover;
+}
+
+/*SEÇÃO PARMESÃO*/
+
+.parmesao {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+    margin-bottom: 100px;
+}
+
+.parmesao-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.parmesao img {
+    width: 500px;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-left: 0; /* retirado margin-left fixo */
+}
+
+/* =============================================
+   SEÇÃO APRESENTA PRODUTO
+   ============================================= */
+
+.apresenta-produto {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+    margin-bottom: 100px;
+    flex-direction: row-reverse;
+}
+
+    .apresenta-produto img {
+        width: 500px;
+        max-width: 70%;
+        height: auto;
+        object-fit: cover;
+        margin-left: 0;
+    }
+
+    .apresenta-produto-texto {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+/*SEÇÃO ESPECIFICAÇÕES*/
+
+.especificacoes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+    margin-bottom: 20px;
+}
+
+    .especificacoes img {
+        width: 500px;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+.especificacoes-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+}
+
+.especificacoes p {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+}
+
+/*SEÇÃO FOTO WUO*/
+
+.wuo-segurando-queijo {
+    display: flex; /* ← faltou */
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+    margin-bottom: 100px;
+}
+
+    .wuo-segurando-queijo img {
+        width: 500px;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+
+/*SEÇÃO SOBRE
+
+.sobre-produto-grupo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    padding: 60px;
+    margin-bottom: 100px;
+}
+
+.sobre-produto-grupo-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+} */
+
+
+
+.sobre-produto-grupo p {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+    max-width: 900px;
+    line-height: 1.2;
+}
+
+
+/*SEPARADOR*/
+
+.separador {
+    width: 80%;
+    margin: 0 auto;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+/*RESPONSIVIDADE — TABLET (max 900px)*/
+
+@media (max-width: 900px) {
+    nav {
+        padding: 16px 20px;
+        justify-content: space-between;
+    }
+
+    .parmesao {
+        gap: 30px;
+        padding: 40px 30px;
+    }
+
+        .parmesao img {
+            width: 100%;
+        }
+
+    .apresenta-produto {
+        gap: 30px;
+        padding: 40px 30px;
+    }
+}
+
+/*RESPONSIVIDADE — MOBILE (max 600px)*/
+
+@media (max-width: 600px) {
+
+    /* Nav vira coluna */
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+        gap: 8px;
+    }
+
+        nav img {
+            height: 40px;
+        }
+
+    /* Seções viram coluna */
+    .parmesao,
+    .apresenta-produto {
+        flex-direction: column;
+        padding: 30px 16px;
+        gap: 24px;
+    }
+
+        .parmesao img,
+        .apresenta-produto img {
+            width: 100%;
+            margin-left: 0;
+            border-radius: 8px;
+        }
+
+    /* Parágrafo com largura total no mobile */
+    p {
+        max-width: 100%;
+    }
+
+    h2 {
+        max-width: 100%;
+    }
+
+    .hero {
+        padding: 30px 16px;
+    }
+}
+
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    .nav-toggle-label {
+        display: block;
+    }
+
+    .nav-links {
+        display: none; /* esconde por padrão */
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        padding: 10px 0;
+    }
+
+    /* Quando o checkbox está marcado, mostra o menu */
+    .nav-toggle:checked ~ .nav-links {
+        display: flex;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        position: relative;
+    }
+
+        /* Logo e hambúrguer ficam na mesma linha */
+        nav > a:first-child {
+            flex: 1;
+        }
+}
+
+.sobre-produto-grupo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 60px;
+    margin-bottom: 0;
+}
+
+.sobre-produto-grupo-texto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    text-align: center;
+    max-width: 860px;
+    width: 100%;
+}
+
+.sobre-subtitulo {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 1.4vw, 15px);
+    font-weight: 500;
+    color: #aaaaaa;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    max-width: 100%;
+    margin-top: 12px;
+}
+
+.separador-interno {
+    width: 40px;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 40px auto;
+}
+
+/* Grid de membros */
+.equipe-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.membro-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 18px 24px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    min-width: 185px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    background-color: #fafafa;
+}
+
+    .membro-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        transform: translateY(-2px);
+    }
+
+.membro-nome {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(13px, 1.6vw, 16px);
+    font-weight: 700;
+    color: #282828;
+}
+
+.membro-ra {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 400;
+    color: #b0b0b0;
+    letter-spacing: 0.04em;
+}
+
+/* Texto do sistema */
+.sobre-sistema-texto {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(15px, 1.8vw, 20px);
+    color: #6c6c6c;
+    line-height: 1.6;
+    max-width: 680px;
+    text-align: center;
+}
+
+/* Pills de tecnologia */
+.tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.tech-pill {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(11px, 1.3vw, 13px);
+    font-weight: 600;
+    color: #484848;
+    background-color: #f2f2f2;
+    border: 1px solid #e4e4e4;
+    border-radius: 999px;
+    padding: 5px 16px;
+    letter-spacing: 0.03em;
+}
+
+/* =============================================
+   RODAPÉ
+   ============================================= */
+
+.rodape {
+    background-color: #f5f5f7;
+    padding: 48px 60px 32px;
+    margin-top: 80px;
+}
+
+.rodape-topo {
+    margin-bottom: 40px;
+}
+
+.rodape-conteudo {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.rodape-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 140px;
+}
+
+.rodape-titulo-col {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(11px, 1.2vw, 13px);
+    font-weight: 700;
+    color: #1d1d1f;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+
+.rodape-col a {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 1.3vw, 14px);
+    color: #6c6c6c;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+    .rodape-col a:hover {
+        color: #1d1d1f;
+    }
+
+.rodape-info {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 1.3vw, 14px);
+    color: #6c6c6c;
+}
+
+.rodape-base {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.rodape-copy {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(11px, 1.2vw, 13px);
+    color: #aaaaaa;
+    text-align: center;
+    max-width: 100%;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .sobre-produto-grupo {
+        padding: 50px 20px;
+    }
+
+    .equipe-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .membro-card {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .rodape {
+        padding: 40px 24px 28px;
+    }
+
+    .rodape-conteudo {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        text-align: center;
+    }
+}
+
+/* =============================================
+   LOGIN — cole no final do site.css
+   ============================================= */
+
+.login-wrapper {
+    min-height: calc(100vh - 60px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background-color: white;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.login-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.login-subtitulo {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(13px, 1.5vw, 15px);
+    color: #aaaaaa;
+    font-weight: 400;
+    max-width: 100%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.login-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.login-label {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 1.3vw, 14px);
+    font-weight: 600;
+    color: #282828;
+    letter-spacing: 0.02em;
+}
+
+.login-input {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 1.6vw, 16px);
+    color: #1d1d1f;
+    background-color: #f5f5f7;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 12px 16px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+    .login-input::placeholder {
+        color: #c0c0c0;
+    }
+
+    .login-input:focus {
+        background-color: white;
+        border-color: #b0b0b0;
+    }
+
+.login-erro {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(12px, 1.3vw, 14px);
+    color: #c0392b;
+    font-weight: 500;
+    max-width: 100%;
+}
+
+.login-btn-primario {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 1.6vw, 16px);
+    font-weight: 600;
+    color: white;
+    background-color: #282828;
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    letter-spacing: 0.01em;
+}
+
+    .login-btn-primario:hover {
+        background-color: #1d1d1f;
+    }
+
+.login-divisor {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #d0d0d0;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+}
+
+    .login-divisor::before,
+    .login-divisor::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background-color: #e8e8e8;
+    }
+
+.login-btn-secundario {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 1.6vw, 16px);
+    font-weight: 500;
+    color: #282828;
+    background-color: transparent;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 13px;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    display: block;
+}
+
+    .login-btn-secundario:hover {
+        background-color: #f5f5f7;
+        border-color: #c8c8c8;
+    }
+
+@media (max-width: 600px) {
+    .login-card {
+        gap: 24px;
+    }
+}
+
+.nav-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #555;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+

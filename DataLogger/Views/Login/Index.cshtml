@@ -1,4 +1,4 @@
-﻿@{
+﻿<!--@{
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,16 +8,61 @@
         <form action="/login/Fazlogin" method="post">
             <label for="usuario" class="control-label">Usuário</label>
             <input type="text" name="usuario" class="form-control" required placeholder='Usuário...' />
-
+            <br />
             <label for="senha" class="control-label">Senha</label>
             <input type="password" name="senha" class="form-control" required placeholder='Senha...' />
             <br />
             <input type="submit" value="Login" class="btn btn-success" />
             &nbsp;
-            <a href="/usuario/create" class="btn btn-success" />Fazer Cadastro<a/>
+            <a href="/usuario/create" class="btn btn-success">Fazer Cadastro</a>
 
             <br />
             <span class="text-danger"> @ViewBag.Erro</span>
         </form>
     </div>
-</div>
+</div> *-->
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="login-wrapper">
+
+    <div class="login-card">
+
+        <div class="login-header">
+            <h2 class="normal" style="font-size: clamp(22px, 3vw, 32px);">Bem-vindo.</h2>
+            <p class="login-subtitulo">Acesse sua conta para continuar.</p>
+        </div>
+
+        <form action="/login/Fazlogin" method="post" class="login-form">
+
+            <div class="login-campo">
+                <label for="usuario" class="login-label">Usuário</label>
+                <input type="text" id="usuario" name="usuario" class="login-input" required placeholder="Digite seu usuário" />
+            </div>
+
+            <div class="login-campo">
+                <label for="senha" class="login-label">Senha</label>
+                <input type="password" id="senha" name="senha" class="login-input" required placeholder="Digite sua senha" />
+            </div>
+
+            @if (ViewBag.Erro != null)
+            {
+                <p class="login-erro">@ViewBag.Erro</p>
+            }
+
+            <input type="submit" value="Entrar" class="login-btn-primario" />
+
+            <div class="login-divisor">
+                <span>ou</span>
+            </div>
+
+            <a href="/usuario/create" class="login-btn-secundario">Criar conta</a>
+
+        </form>
+
+    </div>
+
+</section>

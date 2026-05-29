@@ -11,5 +11,7 @@
         public string FiwareDeviceId => $"datalogger{Id:D3}";
 
         public string FiwareEntityName => $"urn:ngsi-ld:DataLogger:{Id:D3}";
+
+        public string ServerIp { get; set; }
     }
 }

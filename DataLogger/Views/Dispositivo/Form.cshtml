@@ -21,6 +21,14 @@
         <br />
     }
 
+    @if (ViewBag.Operacao == "I")
+    {
+        <label asp-for="ServerIp" class="control-label">IP do Servidor AWS:</label>
+        <input asp-for="ServerIp" class="form-control" placeholder="Ex: 123.456.789.0" />
+        <span asp-validation-for="ServerIp" class="text-danger"></span>
+        <br />
+    }
+
     <label asp-for="Descricao" class="control-label">Nome do Dispositivo:</label>
     <input asp-for="Descricao" class="form-control" placeholder="Ex: Sensor da Estufa 1" />
     <span asp-validation-for="Descricao" class="text-danger"></span>
