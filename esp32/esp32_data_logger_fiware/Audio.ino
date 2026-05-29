@@ -4,6 +4,13 @@ void aguardarAudio() {
     if (MQTT.connected()) {
       MQTT.loop();
     }
+
+    unsigned long tempoAtual = millis();
+    if (tempoAtual - tempoAnteriorTelemetria >= intervaloTelemetria) {
+      tempoAnteriorTelemetria = tempoAtual;
+      readAndPublishSensors();
+    }
+
     delay(10);
   }
 }
@@ -16,43 +23,15 @@ void initMP3() {
     Serial.println("Erro ao iniciar o DFPlayer!");
     while(true);
   }
+  
   myDFPlayer.volume(default_audioVolume);
   myDFPlayer.EQ(0);
   delay(500);
 
   myDFPlayer.playFolder(1, 9);
+  delay(2000);
   Serial.println("DFPlayer iniciado com sucesso.");
   aguardarAudio();
-}
-
-void gerenciarFilaDeAudio() {
-  // Se o pino estiver LOW, um áudio está tocando. Saimos da função e deixamos o ESP32 trabalhar.
-  if (digitalRead(busyPin) == LOW) {
-    return;
-  }
-
-  // Se chegou aqui, o DFPlayer está livre (HIGH). Vamos checar a fila:
-
-  if (tocarAudioTemp) {
-    myDFPlayer.playFolder(1, 1); // Exemplo: Pasta 1, Arquivo 1 ("Temperatura fora do ideal")
-    tocarAudioTemp = false;      // Abaixa a flag para não tocar repetido
-    delay(100);                  // Pequeno delay só pro DFPlayer processar o comando e baixar o busyPin
-    return;
-  }
-
-  if (tocarAudioUmid) {
-    myDFPlayer.playFolder(1, 2); // Exemplo: Pasta 1, Arquivo 2 ("Umidade baixa")
-    tocarAudioUmid = false;
-    delay(100);
-    return;
-  }
-
-  if (tocarAudioLum) {
-    myDFPlayer.playFolder(1, 3); // Exemplo: Pasta 1, Arquivo 3 ("Ambiente escuro")
-    tocarAudioLum = false;
-    delay(100);
-    return;
-  }
 }
 
 void falarNumero(int valor) {

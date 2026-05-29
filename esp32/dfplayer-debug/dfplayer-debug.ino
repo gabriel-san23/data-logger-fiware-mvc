@@ -31,15 +31,20 @@ void setup() {
 
   Serial.println("\nSUCESSO: Comunicacao estabelecida!");
   
-  myDFPlayer.volume(15); 
+  myDFPlayer.volume(30); 
   myDFPlayer.EQ(0);
   delay(500);
   
-  // Usaremos play(1) que é mais a prova de falhas do que playFolder para testes
   Serial.println("\nComando enviado: Tocar a PRIMEIRA musica do cartao SD...");
-  myDFPlayer.play(1); 
-  
-  // Agora usamos a SUA lógica para testar se o pino BUSY está funcionando
+  myDFPlayer.playFolder(1,9);
+  aguardarAudio();
+  myDFPlayer.playFolder(5,5);
+  aguardarAudio();
+  myDFPlayer.playFolder(5,4);
+  aguardarAudio();
+  myDFPlayer.playFolder(6,1);
+  aguardarAudio();
+  myDFPlayer.playFolder(6,2);
   aguardarAudio();
 }
 

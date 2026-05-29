@@ -22,32 +22,36 @@ void initMQTT() {
 }
 
 void reconnectMQTT() {
-  if (!MQTT.connected())
-  {
-    Serial.print("Conectando-se ao broker ");
-    Serial.print("'");
-    Serial.print(default_BROKER_MQTT); Serial.print(":");
-    Serial.print(default_BROKER_PORT);
-    Serial.println("'");
-    Serial.print("Aguarde.");
+  if (!MQTT.connected()) {
+    Serial.print("Conectando-se ao broker MQTT...");
   }
+  
+  int tentativas = 0;
+  
   while (!MQTT.connected()) {
     if (MQTT.connect(ID_MQTT)) {
+      delay(2000);
       MQTT.subscribe(TOPICO_SUBSCRIBE);
       Serial.println("");
       Serial.println("Conectado ao sistema FIWARE!");
-      myDFPlayer.playFolder(1, 3);
-      aguardarAudio();
     } else {
-      myDFPlayer.playFolder(1, 4);
-      aguardarAudio();
+      tentativas++;
       Serial.print(".");
-      delay(2000);
+      
+      // Se ele falhar 10 vezes (aprox. 5 segundos), ele toca o áudio
+      if (tentativas >= 10) {
+        myDFPlayer.playFolder(1, 4);
+        aguardarAudio();
+        tentativas = 0; 
+      } else {
+        delay(500);
+      }
     }
   }
 }
 
 // WiFi
+
 void initWiFi() {
   delay(10);
   Serial.println();
@@ -58,15 +62,18 @@ void initWiFi() {
 }
 
 void reconnectWiFi() {
-  if (WiFi.status() == WL_CONNECTED)
+  if (WiFi.status() == WL_CONNECTED) {
     return;
+  }
 
   WiFi.begin(default_SSID, default_PASSWORD);
   Serial.print("Aguarde");
+  
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
+  
   Serial.println();
   Serial.print("Conectado com sucesso na rede: ");
   Serial.println(default_SSID);

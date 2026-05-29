@@ -7,8 +7,12 @@ void readAndPublishSensors() {
   //validação
   if (isnan(temperatura) || isnan(umidade)) {
     Serial.println("Erro: Falha DHT");
-    myDFPlayer.playFolder(6, 8); 
-    aguardarAudio();
+
+    if (digitalRead(busyPin) == HIGH) {
+    myDFPlayer.playFolder(6, 8); // "Falha na leitura dos sensores"
+    delay(100); 
+    }
+
     return;
   }
 
@@ -22,21 +26,38 @@ void readAndPublishSensors() {
 
   Serial.print("Dados publicados no tópico: ");
   Serial.println(payload);
+  printSensorValues();
 }
 
-void printSensorValues(){
-  // Serial
+void printSensorValues() {
   Serial.print("T: "); Serial.print(temperatura); Serial.println(" C");
   Serial.print("U: "); Serial.print(umidade); Serial.println(" %");
   Serial.print("L: "); Serial.print(luminosidade); Serial.println(" %");
   Serial.println("---");
 
-  // LCD
-  lcd.clear();
+  lcd.clear(); 
+  
+  // --- Linha 0 (Superior): Temperatura ---
   lcd.setCursor(0, 0);
-  lcd.print("T: "); lcd.print(temperatura, 1); lcd.print("C");
+  lcd.write(byte(0));         // Ícone 0: Termômetro
+  lcd.print(" ");            
+  lcd.print(temperatura, 1);  // Temperatura com 1 casa decimal
+  lcd.print("C");
+  
+  // --- Linha 1 (Inferior): Umidade e Luminosidade ---
   lcd.setCursor(0, 1);
-  lcd.print("U: "); lcd.print(umidade, 1); lcd.print("%  L:"); lcd.print(luminosidade);
+  
+  // Umidade
+  lcd.write(byte(1));         // Ícone 1: Gota
+  lcd.print(" ");
+  lcd.print(umidade, 1);
+  lcd.print("%  ");           // Espaçamento para o próximo ícone
+  
+  // Luminosidade
+  lcd.write(byte(2));         // Ícone 2: Sol
+  lcd.print(" ");
+  lcd.print(luminosidade);
+  lcd.print("%");        
 }
 
 void checarLimiares() {
@@ -47,6 +68,11 @@ void checarLimiares() {
     if (!alarmeTempAtivo) {         // Só enfileira se antes estava normal
       tocarAudioTemp = true;        // Levanta a flag para o áudio tocar
       alarmeTempAtivo = true;       // "Trava" novos alertas dessa grandeza
+
+      if (temperatura > TEMP_MAX)
+        myDFPlayer.playFolder(6, 1); // "Temperatura acima do ideal para a maturação"
+      if (temperatura < TEMP_MIN)
+      myDFPlayer.playFolder(6, 2); // "Temperatura abaixo do ideal para a maturação"
     }
     alertaGeral = true;
   } else {
@@ -58,6 +84,7 @@ void checarLimiares() {
     if (!alarmeUmidAtivo) {
       tocarAudioUmid = true;
       alarmeUmidAtivo = true;
+      myDFPlayer.playFolder(6, 3); // "Umidade fora do padrão adequado"
     }
     alertaGeral = true;
   } else {
@@ -65,10 +92,12 @@ void checarLimiares() {
   }
 
   // --- LUMINOSIDADE ---
-  if (luminosidade < LUMINOSIDADE_MIN) {
+  if (luminosidade > LUMINOSIDADE_MAX) {
     if (!alarmeLumAtivo) {
       tocarAudioLum = true;
       alarmeLumAtivo = true;
+      myDFPlayer.playFolder(6, 4); // "Excesso de luz detectado na câmara"
+
     }
     alertaGeral = true;
   } else {
