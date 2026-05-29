@@ -61,6 +61,44 @@ namespace DataLogger.Controllers
             }
         }
 
+        public override IActionResult Save(UsuarioViewModel model, string Operacao)
+        {
+            try
+            {
+                ValidaDados(model, Operacao);
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Operacao = Operacao;
+                    PreencheDadosParaView(Operacao, model);
+                    return View(NomeViewForm, model);
+                }
+
+                DAO.Insert(model);
+
+                if (model.FotoPerfilEmByte != null)
+                    HttpContext.Session.SetString("FotoPerfil", Convert.ToBase64String(model.FotoPerfilEmByte));
+
+                // Após cadastro: loga automaticamente e vai ao dashboard
+                if (Operacao == "I")
+                {
+                    HttpContext.Session.SetString("Logado", "true");
+                    HttpContext.Session.SetString("NomeUsuario", model.NomeUsuario);
+                    HttpContext.Session.SetInt32("IdUsuario", model.Id);
+                    HttpContext.Session.SetString("TipoUsuario", model.TipoUsuario);
+                    if (model.FotoPerfilEmByte != null)
+                        HttpContext.Session.SetString("FotoPerfil", Convert.ToBase64String(model.FotoPerfilEmByte));
+                    return RedirectToAction("Index", "Dashboard");
+                }
+
+                return RedirectToAction(NomeViewIndex);
+            }
+            catch (Exception erro)
+            {
+                return View("Error", new ErrorViewModel(erro.ToString()));
+            }
+        }
+
+
         public byte[] ConvertImageToByte(IFormFile file)
         {
             if (file != null)

@@ -42,6 +42,9 @@ namespace DataLogger.Controllers
                     HttpContext.Session.SetInt32("IdUsuario", model.Id);
                     HttpContext.Session.SetString("TipoUsuario", model.TipoUsuario);
 
+                    if (model.FotoPerfilEmByte != null)
+                        HttpContext.Session.SetString("FotoPerfil", Convert.ToBase64String(model.FotoPerfilEmByte));
+
                     return RedirectToAction("index", "dashboard");
                 }
             }
