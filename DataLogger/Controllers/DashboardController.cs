@@ -11,6 +11,11 @@ namespace DataLogger.Controllers
     {
         private readonly FiwareServices _fiwareServices;
 
+        public DashboardController(FiwareServices fiwareServices)
+        {
+            _fiwareServices = fiwareServices;
+        }
+
         private static System.Collections.Generic.Dictionary<string, bool> _subscricoesFeitas
             = new System.Collections.Generic.Dictionary<string, bool>();
 

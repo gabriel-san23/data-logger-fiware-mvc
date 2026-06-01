@@ -40,7 +40,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/Home/AdminAction",
+                url: "/Dashboard/AdminAction",
                 data: { serverIp: serverIp, acao: acao },
                 success: function (resposta) {
                     var obj = typeof resposta === "string" ? JSON.parse(resposta) : resposta;

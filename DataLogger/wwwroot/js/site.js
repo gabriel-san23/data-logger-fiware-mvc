@@ -40,7 +40,7 @@ function carregarGraficos() {
 function carregarLuminosidade(serverIp, idDispositivo, lastN) {
     $.ajax({
         type: "GET",
-        url: "/Home/historicoLuminosidade",
+        url: "/Dashboard/historicoLuminosidade",
         data: { serverIp: serverIp, idDispositivo: idDispositivo, lastN: lastN },
         success: function (resposta) {
             var dados = extrairValoresDoFiware(resposta, "luminosity");
@@ -59,7 +59,7 @@ function carregarLuminosidade(serverIp, idDispositivo, lastN) {
 function carregarTemperatura(serverIp, idDispositivo, lastN) {
     $.ajax({
         type: "GET",
-        url: "/Home/historicoTemperatura",
+        url: "/Dashboard/historicoTemperatura",
         data: { serverIp: serverIp, idDispositivo: idDispositivo, lastN: lastN },
         success: function (resposta) {
             var dados = extrairValoresDoFiware(resposta, "temperature");
@@ -78,7 +78,7 @@ function carregarTemperatura(serverIp, idDispositivo, lastN) {
 function carregarUmidade(serverIp, idDispositivo, lastN) {
     $.ajax({
         type: "GET",
-        url: "/Home/historicoHumidade",
+        url: "/Dashboard/historicoHumidade",
         data: { serverIp: serverIp, idDispositivo: idDispositivo, lastN: lastN },
         success: function (resposta) {
             var dados = extrairValoresDoFiware(resposta, "humidity");

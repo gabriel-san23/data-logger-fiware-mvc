@@ -370,7 +370,7 @@ namespace DataLogger.DAO
                         {
                             http = new { url = $"http://{serverIp}:8666/notify" },
                             attrs = new[] { "luminosity", "temperature", "humidity" },
-                            attrFormat = "legacy"
+                            attrsFormat = "legacy"
                         }
                     };
 
