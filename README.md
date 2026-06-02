@@ -39,6 +39,24 @@ This project proposes a low-cost and scalable IoT solution capable of:
 
 ---
 
+🌳 Sustainable Development Goals
+
+SDG 12 focuses on ensuring sustainable production and consumption patterns. Our project falls under two main pillars of this goal:
+
+ - *Reducing Food Waste (Target 12.3)*
+
+The maturation of cheeses (especially artisanal varieties such as Canastra, Parmesan, and Brie) requires rigorous temperature and humidity control. Abrupt variations favor the growth of unwanted fungi, excessive drying, or inadequate fermentation, resulting in the loss and disposal of entire batches.
+
+Our monitoring system can track these environmental conditions, while an automated control system can directly prevent food loss throughout the production chain.
+
+ - *Energy and Resource Efficiency (Target 12.2)*
+
+By implementing intelligent control strategies (such as hysteresis or PID control), climate-control equipment (refrigeration and humidification systems), potentially used as actuators in the system, will only be activated when strictly necessary.
+
+This approach prevents the continuous operation of compressors and heating elements, optimizing electricity consumption and improving resource efficiency within the maturation chamber.
+
+---
+
 ✨ Features
 
 - 🌡️ Temperature monitoring
