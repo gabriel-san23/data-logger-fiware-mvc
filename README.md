@@ -8,7 +8,6 @@
   <img src="https://img.shields.io/badge/ESP32-IoT-blue">
   <img src="https://img.shields.io/badge/FIWARE-Context%20Broker-orange">
   <img src="https://img.shields.io/badge/Arduino-C%2FC%2B%2B-success">
-  <img src="https://img.shields.io/badge/HTML-CSS-JavaScript-yellow">
   <img src="https://img.shields.io/badge/Status-Completed-brightgreen">
   <img src="https://img.shields.io/badge/Academic-Project-blueviolet">
 </p>---
@@ -77,7 +76,7 @@ This approach prevents the continuous operation of compressors and heating eleme
 Monitoring Application
 
 <p align="center">
-  <img src="./assets/dashboard.png" width="900">
+  <img src="./assets/dashboard.jpg" width="900">
 </p>The web application displays environmental measurements in real time and provides historical visualization of collected data.
 
 ---
@@ -100,36 +99,26 @@ The structure was modeled in AutoCAD and produced through 3D printing, creating 
 
 ## 🏗️ System Architecture
 
-+----------------------+
-|      DHT11 Sensor    |
-| Temperature/Humidity |
-+----------+-----------+
-           |
-           |
-+----------v-----------+
-|        ESP32         |
-+----------+-----------+
-           |
-           |
-           v
-+----------------------+
-|      FIWARE API      |
-|   Context Broker     |
-+----------+-----------+
-           |
-           |
-           v
-+----------------------+
-| Monitoring Interface |
-| Historical Database  |
-| Alert Management     |
-+----------+-----------+
-           |
-           |
-           v
-+----------------------+
-| LED + Voice Alerts  |
-+----------------------+
+```text
+DHT11 + LDR Sensors
+          │
+          ▼
+       ESP32
+          │
+          ▼
+    FIWARE API
+    Context Broker
+          │
+          ▼
+ Monitoring Web App
+          │
+          ▼
+ Historical Data
+ & Alert Management
+          │
+          ▼
+     LED + Voice alerts
+```
 
 ---
 
@@ -197,28 +186,6 @@ Design & Prototyping
 
 - AutoCAD
 - 3D Printing
-
----
-
-## 📂 Project Structure
-
-.
-├── firmware/
-│   ├── esp32_firmware.ino
-│
-├── web-app/
-│   ├── css/
-│   ├── js/
-│   ├── index.html
-│
-├── assets/
-│   ├── dashboard.png
-│   ├── cheese-prototype.jpg
-│   └── banner.png
-│
-└── README.md
-
----
 
 ## ⚙️ Installation
 
