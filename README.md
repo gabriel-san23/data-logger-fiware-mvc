@@ -1,7 +1,7 @@
 🧀 Smart Cheese Maturation Monitoring System
 
 <p align="center">
-  <img src="./assets/banner.png" alt="Project Banner" width="900">
+  <img src="./assets/cheese-prototype.jpg" alt="Project Banner" width="900">
 </p><p align="center">
   IoT-based monitoring solution for cheese maturation chambers using ESP32, FIWARE, and real-time environmental supervision.
 </p><p align="center">
@@ -96,7 +96,7 @@ The structure was modeled in AutoCAD and produced through 3D printing, creating 
 
 Watch the complete demonstration of the project:
 
-"Video Demonstration" (https://youtu.be/your-video-link)
+"Video Demonstration" (https://youtube.com/watch?v=3xvFDVorZQk&si=B_BcqaBOZz9SQhT3)
 
 ---
 
