@@ -1,4 +1,4 @@
-🧀 Smart Cheese Maturation Monitoring System
+# 🧀 Smart Cheese Monitoring System
 
 <p align="center">
   <img src="./assets/cheese-prototype.jpg" alt="Project Banner" width="900">
@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/Academic-Project-blueviolet">
 </p>---
 
-📖 About The Project
+## 📖 About The Project
 
 Cheese maturation is one of the most critical stages in the production of artisanal cheeses. During this process, environmental conditions such as temperature and humidity must remain within specific ranges to ensure the desired flavor, texture, consistency, and appearance of the final product.
 
@@ -25,7 +25,7 @@ To reinforce the project's identity and demonstrate practical prototyping skills
 
 ---
 
-🎯 Project Motivation
+## 🎯 Project Motivation
 
 Small-scale cheese producers often rely on manual inspections to monitor maturation conditions.
 
@@ -39,7 +39,7 @@ This project proposes a low-cost and scalable IoT solution capable of:
 
 ---
 
-🌳 Sustainable Development Goals
+## 🌳 Sustainable Development Goals
 
 SDG 12 focuses on ensuring sustainable production and consumption patterns. Our project falls under two main pillars of this goal:
 
@@ -57,7 +57,7 @@ This approach prevents the continuous operation of compressors and heating eleme
 
 ---
 
-✨ Features
+## ✨ Features
 
 - 🌡️ Temperature monitoring
 - 💧 Humidity monitoring
@@ -72,7 +72,7 @@ This approach prevents the continuous operation of compressors and heating eleme
 
 ---
 
-📸 Project Demonstration
+## 📸 Project Demonstration
 
 Monitoring Application
 
@@ -92,15 +92,13 @@ The structure was modeled in AutoCAD and produced through 3D printing, creating 
 
 ---
 
-🎥 Demonstration Video
+## 🎥 Demonstration Video
 
-Watch the complete demonstration of the project:
-
-"Video Demonstration" (https://youtube.com/watch?v=3xvFDVorZQk&si=B_BcqaBOZz9SQhT3)
+[![Watch the video](https://img.youtube.com/vi/3xvFDVorZQk/maxresdefault.jpg)](https://youtu.be/3xvFDVorZQk)
 
 ---
 
-🏗️ System Architecture
+## 🏗️ System Architecture
 
 +----------------------+
 |      DHT11 Sensor    |
@@ -135,7 +133,7 @@ Watch the complete demonstration of the project:
 
 ---
 
-🔧 Hardware Components
+## 🔧 Hardware Components
 
 Component| Function
 ESP32| Main microcontroller
@@ -148,7 +146,7 @@ Buzzer| Audible alert indication
 
 ---
 
-📊 Monitored Variables
+## 📊 Monitored Variables
 
 Variable| Importance During Cheese Maturation
 Temperature| Controls maturation speed and biochemical reactions
@@ -157,7 +155,7 @@ Luminosity| Helps monitor environmental stability
 
 ---
 
-🚨 Alert System
+## 🚨 Alert System
 
 The system continuously evaluates sensor measurements against predefined thresholds.
 
@@ -173,7 +171,7 @@ This mechanism allows rapid response to environmental deviations that could comp
 
 ---
 
-🚀 Technologies Used
+## 🚀 Technologies Used
 
 Hardware
 
@@ -202,7 +200,7 @@ Design & Prototyping
 
 ---
 
-📂 Project Structure
+## 📂 Project Structure
 
 .
 ├── firmware/
@@ -222,11 +220,11 @@ Design & Prototyping
 
 ---
 
-⚙️ Installation
+## ⚙️ Installation
 
 Clone the Repository
 
-git clone https://github.com/your-username/smart-cheese-monitor.git
+git clone https://github.com/gabriel-san23/data-logger-fiware-mvc.git
 
 Configure the ESP32
 
@@ -247,7 +245,7 @@ Launch the web application and configure the FIWARE connection parameters.
 
 ---
 
-📈 Results
+## 📈 Results
 
 The developed system successfully:
 
@@ -260,7 +258,7 @@ The developed system successfully:
 
 ---
 
-👨‍💻 Authors
+## 👨‍💻 Authors
 
 - Daniel Cataneo
 - Felipe Nascimento Silva
@@ -270,7 +268,7 @@ The developed system successfully:
 
 ---
 
-📄 License
+## 📄 License
 
 This project was developed for educational and academic purposes.
 
