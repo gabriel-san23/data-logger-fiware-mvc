@@ -54,6 +54,94 @@
             </div>
         </div>
     </div>
+
+    <!-- Últimos registros salvos -->
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <h4>Últimos Registros Salvos</h4>
+
+            <!-- filtros da tabela -->
+            <div class="row mb-2">
+                <div class="col-md-3">
+                    <label>Ordenar por:</label>
+                    <select id="filtroOrdem" class="form-control">
+                        <option value="desc">Mais recentes primeiro</option>
+                        <option value="asc">Mais antigas primeiro</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Filtrar por parâmetro:</label>
+                    <select id="filtroParametro" class="form-control">
+                        <option value="todos">Todos</option>
+                        <option value="luminosity">Luminosidade</option>
+                        <option value="temperature">Temperatura</option>
+                        <option value="humidity">Umidade</option>
+                    </select>
+                </div>
+                <div class="col-md-2" style="display: flex; align-items: flex-end;">
+                    <button class="btn btn-secondary" onclick="carregarTabelaRegistros()">Filtrar</button>
+                </div>
+            </div>
+
+            <span id="statusTabela" class="text-muted"></span>
+
+            <table class="table table-responsive table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Dispositivo</th>
+                        <th>Data / Hora</th>
+                        <th>Luminosidade</th>
+                        <th>Temperatura (°C)</th>
+                        <th>Umidade (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="corpoTabelaRegistros">
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">
+                            Clique em "Carregar Gráficos" para exibir os registros.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Informações adicionais dos gráficos -->
+            <div id="painelInformacoesAdicionais" style="display: none;">
+                <h5>Informações Adicionais</h5>
+                <table class="table table-sm table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Parâmetro</th>
+                            <th>Média</th>
+                            <th>Maior Valor</th>
+                            <th>Menor Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Luminosidade</strong></td>
+                            <td id="mediaLuminosidade">-</td>
+                            <td id="maiorLuminosidade">-</td>
+                            <td id="menorLuminosidade">-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Temperatura (°C)</strong></td>
+                            <td id="mediaTemperatura">-</td>
+                            <td id="maiorTemperatura">-</td>
+                            <td id="menorTemperatura">-</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Umidade (%)</strong></td>
+                            <td id="mediaUmidade">-</td>
+                            <td id="maiorUmidade">-</td>
+                            <td id="menorUmidade">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
 }
 else
 {

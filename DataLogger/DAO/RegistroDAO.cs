@@ -55,6 +55,27 @@ namespace DataLogger.DAO
             Insert(model);
         }
 
+        public void SalvarLoteRegistros(int idDispositivo,
+            List<int> luminosidades,
+            List<decimal> temperaturas,
+            List<int> umidades)
+        {
+            int total = Math.Min(luminosidades.Count,
+                        Math.Min(temperaturas.Count, umidades.Count));
+
+            for (int i = 0; i < total; i++)
+            {
+                var model = new RegistroViewModel()
+                {
+                    IdDispositivo = idDispositivo,
+                    ValorLuminosidade = luminosidades[i],
+                    ValorTemperatura = temperaturas[i],
+                    ValorUmidade = umidades[i]
+                };
+                Insert(model);
+            }
+        }
+
         public List<RegistroViewModel> ListagemPorDispositivo(int idDispositivo, int lastN = 30)
         {
             string sql = @"SELECT TOP (@lastN) r.id, r.idDispositivo, r.valorUmidade,
@@ -64,6 +85,42 @@ namespace DataLogger.DAO
                            INNER JOIN tbDispositivos d ON r.idDispositivo = d.id
                            WHERE r.idDispositivo = @idDispositivo
                            ORDER BY r.dataHora DESC";
+
+            var parametros = new SqlParameter[]
+            {
+                new SqlParameter("lastN", lastN),
+                new SqlParameter("idDispositivo", idDispositivo)
+            };
+
+            var tabela = HelperDAO.ExecutaSqlSelect(sql, parametros);
+            var lista = new List<RegistroViewModel>();
+            foreach (DataRow registro in tabela.Rows)
+                lista.Add(MontaModel(registro));
+
+            return lista;
+        }
+
+        public List<RegistroViewModel> ListagemComFiltro(int idDispositivo, int lastN = 30,
+            string ordem = "desc", string filtroParametro = "todos")
+        {
+            string condicaoParametro = "";
+            if (filtroParametro == "luminosity")
+                condicaoParametro = "AND r.valorLuminosidade > 0";
+            else if (filtroParametro == "temperature")
+                condicaoParametro = "AND r.valorTemperatura > 0";
+            else if (filtroParametro == "humidity")
+                condicaoParametro = "AND r.valorUmidade > 0";
+
+            string direcaoOrdem = ordem == "asc" ? "ASC" : "DESC";
+
+            string sql = $@"SELECT TOP (@lastN) r.id, r.idDispositivo, r.valorUmidade,
+                           r.valorLuminosidade, r.valorTemperatura, r.dataHora,
+                           d.descricao
+                    FROM tbRegistros r
+                    INNER JOIN tbDispositivos d ON r.idDispositivo = d.id
+                    WHERE r.idDispositivo = @idDispositivo
+                    {condicaoParametro}
+                    ORDER BY r.dataHora {direcaoOrdem}";
 
             var parametros = new SqlParameter[]
             {

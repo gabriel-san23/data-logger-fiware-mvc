@@ -172,7 +172,7 @@ create table tbRegistros (
 */
 
 go
-CREATE OR ALTER PROCEDURE spInsert_tbREGISTROS(
+CREATE OR ALTER PROCEDURE spInsert_tbRegistros(
 	@idDispositivo INT,
 	@valorUmidade INT,
 	@valorLuminosidade INT,
@@ -189,6 +189,8 @@ END
 GO
 
 SELECT * FROM tbUsuarios
+
+SELECT * FROM tbRegistros
 
 /*
 SELECT * FROM tbDispositivos

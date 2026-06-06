@@ -6,18 +6,15 @@ const typingText = document.getElementById("typing-text");
 let index = 0;
 
 function typeWriter() {
-
     if (index < text.length) {
-
         typingText.innerHTML += text.charAt(index);
-
         index++;
-
         setTimeout(typeWriter, 60);
     }
 }
 
 window.onload = typeWriter;
+
 var graficoLuminosidade = null;
 var graficoTemperatura = null;
 var graficoUmidade = null;
@@ -32,13 +29,47 @@ function carregarGraficos() {
         return;
     }
 
-    carregarLuminosidade(serverIp, idDispositivo, lastN);
-    carregarTemperatura(serverIp, idDispositivo, lastN);
-    carregarUmidade(serverIp, idDispositivo, lastN);
+    var reqLum = carregarLuminosidade(serverIp, idDispositivo, lastN);
+    var reqTemp = carregarTemperatura(serverIp, idDispositivo, lastN);
+    var reqUmi = carregarUmidade(serverIp, idDispositivo, lastN);
+
+    $.when(reqLum, reqTemp, reqUmi).always(function (resLum, resTemp, resUmi) {
+
+        var jsonLum = resLum[0];
+        var jsonTemp = resTemp[0];
+        var jsonUmi = resUmi[0];
+
+        var dadosLum = extrairValoresDoFiware(jsonLum, "luminosity");
+        var dadosTemp = extrairValoresDoFiware(jsonTemp, "temperature");
+        var dadosUmi = extrairValoresDoFiware(jsonUmi, "humidity");
+
+        if (dadosLum && dadosTemp && dadosUmi) {
+            var lote = {
+                Luminosidades: dadosLum.valores.map(function (v) { return Math.round(v); }),
+                Temperaturas: dadosTemp.valores,
+                Umidades: dadosUmi.valores.map(function (v) { return Math.round(v); })
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboard/salvarLote?idDispositivo=" + idDispositivo,
+                contentType: "application/json",
+                data: JSON.stringify(lote),
+                success: function () {
+                    carregarTabelaRegistros();
+                },
+                error: function () {
+                    $("#statusTabela").text("Erro ao salvar registros no banco.");
+                }
+            });
+        } else {
+            carregarTabelaRegistros();
+        }
+    });
 }
 
 function carregarLuminosidade(serverIp, idDispositivo, lastN) {
-    $.ajax({
+    return $.ajax({
         type: "GET",
         url: "/Dashboard/historicoLuminosidade",
         data: { serverIp: serverIp, idDispositivo: idDispositivo, lastN: lastN },
@@ -57,7 +88,7 @@ function carregarLuminosidade(serverIp, idDispositivo, lastN) {
 }
 
 function carregarTemperatura(serverIp, idDispositivo, lastN) {
-    $.ajax({
+    return $.ajax({
         type: "GET",
         url: "/Dashboard/historicoTemperatura",
         data: { serverIp: serverIp, idDispositivo: idDispositivo, lastN: lastN },
@@ -76,7 +107,7 @@ function carregarTemperatura(serverIp, idDispositivo, lastN) {
 }
 
 function carregarUmidade(serverIp, idDispositivo, lastN) {
-    $.ajax({
+    return $.ajax({
         type: "GET",
         url: "/Dashboard/historicoHumidade",
         data: { serverIp: serverIp, idDispositivo: idDispositivo, lastN: lastN },
@@ -96,7 +127,6 @@ function carregarUmidade(serverIp, idDispositivo, lastN) {
 
 function extrairValoresDoFiware(respostaJson, nomeAtributo) {
     try {
-        // O controller retorna um objeto com "sucesso" e "dados" (que é outro JSON em string)
         var wrapper = typeof respostaJson === "string" ? JSON.parse(respostaJson) : respostaJson;
 
         if (!wrapper.sucesso) {
@@ -104,7 +134,6 @@ function extrairValoresDoFiware(respostaJson, nomeAtributo) {
             return null;
         }
 
-        // O campo "dados" é o JSON do STH-Comet em string
         var dadosFiware = typeof wrapper.dados === "string" ? JSON.parse(wrapper.dados) : wrapper.dados;
 
         var valores = dadosFiware
@@ -116,9 +145,7 @@ function extrairValoresDoFiware(respostaJson, nomeAtributo) {
         if (!valores || valores.length === 0)
             return null;
 
-        // Separa os horários (labels) e os valores para o Chart.js
         var labels = valores.map(function (v) {
-            // Formata a data/hora para exibição no gráfico
             var d = new Date(v.recvTime);
             return d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0") + ":" + String(d.getSeconds()).padStart(2, "0");
         });
@@ -139,7 +166,6 @@ function renderizarGrafico(canvasId, titulo, labels, valores, cor, varGrafico) {
     var ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
-    // Destroi o gráfico anterior se existir (evita sobreposição)
     if (window[varGrafico]) {
         window[varGrafico].destroy();
     }
@@ -162,14 +188,86 @@ function renderizarGrafico(canvasId, titulo, labels, valores, cor, varGrafico) {
             responsive: true,
             plugins: {
                 legend: { display: true },
-                title: {
-                    display: true,
-                    text: titulo
-                }
+                title: { display: true, text: titulo }
             },
             scales: {
                 y: { beginAtZero: false }
             }
+        }
+    });
+}
+
+function carregarTabelaRegistros() {
+    var idDispositivo = $("#idDispositivo").val();
+    var lastN = $("#lastN").val() || 30;
+    var ordem = $("#filtroOrdem").val() || "desc";
+    var filtroParametro = $("#filtroParametro").val() || "todos";
+
+    if (!idDispositivo) {
+        $("#statusTabela").text("Informe o ID do dispositivo para carregar os registros.");
+        return;
+    }
+
+    $("#statusTabela").text("Carregando registros...");
+
+    $.ajax({
+        type: "GET",
+        url: "/Dashboard/listaRegistros",
+        data: {
+            idDispositivo: idDispositivo,
+            lastN: lastN,
+            ordem: ordem,
+            filtroParametro: filtroParametro
+        },
+        success: function (resposta) {
+            var resultado = typeof resposta === "string" ? JSON.parse(resposta) : resposta;
+
+            if (!resultado.sucesso) {
+                $("#statusTabela").text("Erro ao carregar registros: " + resultado.mensagem);
+                return;
+            }
+
+            var registros = resultado.dados;
+            $("#statusTabela").text("");
+
+            if (!registros || registros.length === 0) {
+                $("#corpoTabelaRegistros").html(
+                    "<tr><td colspan='6' class='text-center text-muted'>Nenhum registro encontrado.</td></tr>"
+                );
+                $("#painelInformacoesAdicionais").hide();
+                return;
+            }
+
+            var linhas = "";
+            for (var i = 0; i < registros.length; i++) {
+                var r = registros[i];
+                linhas += "<tr>";
+                linhas += "<td>" + r.id + "</td>";
+                linhas += "<td>" + (r.descricaoDispositivo || "-") + "</td>";
+                linhas += "<td>" + r.dataHora + "</td>";
+                linhas += "<td>" + r.valorLuminosidade + "</td>";
+                linhas += "<td>" + r.valorTemperatura + "</td>";
+                linhas += "<td>" + r.valorUmidade + "</td>";
+                linhas += "</tr>";
+            }
+            $("#corpoTabelaRegistros").html(linhas);
+
+            var info = resultado.informacoesAdicionais;
+            if (info) {
+                $("#mediaLuminosidade").text(info.mediaLuminosidade);
+                $("#maiorLuminosidade").text(info.maiorLuminosidade);
+                $("#menorLuminosidade").text(info.menorLuminosidade);
+                $("#mediaTemperatura").text(info.mediaTemperatura);
+                $("#maiorTemperatura").text(info.maiorTemperatura);
+                $("#menorTemperatura").text(info.menorTemperatura);
+                $("#mediaUmidade").text(info.mediaUmidade);
+                $("#maiorUmidade").text(info.maiorUmidade);
+                $("#menorUmidade").text(info.menorUmidade);
+                $("#painelInformacoesAdicionais").show();
+            }
+        },
+        error: function () {
+            $("#statusTabela").text("Erro ao buscar registros do banco de dados.");
         }
     });
 }

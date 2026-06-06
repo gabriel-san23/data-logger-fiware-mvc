@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Linq;
+using DataLogger.Models;
 
 namespace DataLogger.Controllers
 {
@@ -72,15 +74,12 @@ namespace DataLogger.Controllers
 
                 var historico = await _fiwareServices.RequestLuminosity(serverIp, dispositivo.FiwareEntityName, lastN);
 
-                SalvarDadosDoFiwareNoBanco(historico, idDispositivo, "luminosity");
-
                 return Content(historico, "application/json");
             }
             catch (Exception ex)
             {
                 return Content(JsonSerializer.Serialize(new { sucesso = false, dados = ex.Message }), "application/json");
             }
-
         }
 
         public async Task<IActionResult> historicoTemperatura(string serverIp, int idDispositivo, int lastN = 30)
@@ -97,8 +96,6 @@ namespace DataLogger.Controllers
 
                 var historico = await _fiwareServices.RequestTemperature(serverIp, dispositivo.FiwareEntityName, lastN);
 
-                SalvarDadosDoFiwareNoBanco(historico, idDispositivo, "temperature");
-
                 return Content(historico, "application/json");
             }
             catch (Exception ex)
@@ -109,7 +106,6 @@ namespace DataLogger.Controllers
 
         public async Task<IActionResult> historicoHumidade(string serverIp, int idDispositivo, int lastN = 30)
         {
-
             try
             {
                 var dispositivoDAO = new DispositivoDAO();
@@ -122,13 +118,83 @@ namespace DataLogger.Controllers
 
                 var historico = await _fiwareServices.RequestHumidity(serverIp, dispositivo.FiwareEntityName, lastN);
 
-                SalvarDadosDoFiwareNoBanco(historico, idDispositivo, "humidity");
-
                 return Content(historico, "application/json");
             }
             catch (Exception ex)
             {
                 return Content(JsonSerializer.Serialize(new { sucesso = false, dados = ex.Message }), "application/json");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult salvarLote(int idDispositivo,
+            [FromBody] LoteRegistrosViewModel lote)
+        {
+            try
+            {
+                var registroDAO = new RegistroDAO();
+                registroDAO.SalvarLoteRegistros(
+                    idDispositivo,
+                    lote.Luminosidades,
+                    lote.Temperaturas,
+                    lote.Umidades
+                );
+
+                return Content(JsonSerializer.Serialize(new { sucesso = true }), "application/json");
+            }
+            catch (Exception ex)
+            {
+                return Content(JsonSerializer.Serialize(new { sucesso = false, mensagem = ex.Message }), "application/json");
+            }
+        }
+
+        public IActionResult listaRegistros(int idDispositivo, int lastN = 30,
+    string ordem = "desc", string filtroParametro = "todos")
+        {
+            try
+            {
+                var registroDAO = new RegistroDAO();
+                var lista = registroDAO.ListagemComFiltro(idDispositivo, lastN, ordem, filtroParametro);
+
+                var resultado = lista.Select(r => new
+                {
+                    id = r.Id,
+                    dataHora = r.DataHora.ToString("dd/MM/yyyy HH:mm:ss"),
+                    valorLuminosidade = r.ValorLuminosidade,
+                    valorTemperatura = r.ValorTemperatura,
+                    valorUmidade = r.ValorUmidade,
+                    descricaoDispositivo = r.DescricaoDispositivo
+                }).ToList();
+
+                object informacoesAdicionais = null;
+                if (lista.Count > 0)
+                {
+                    informacoesAdicionais = new
+                    {
+                        mediaLuminosidade = Math.Round(lista.Average(r => (double)r.ValorLuminosidade), 2),
+                        maiorLuminosidade = lista.Max(r => r.ValorLuminosidade),
+                        menorLuminosidade = lista.Min(r => r.ValorLuminosidade),
+
+                        mediaTemperatura = Math.Round((double)lista.Average(r => r.ValorTemperatura), 2),
+                        maiorTemperatura = lista.Max(r => r.ValorTemperatura),
+                        menorTemperatura = lista.Min(r => r.ValorTemperatura),
+
+                        mediaUmidade = Math.Round(lista.Average(r => (double)r.ValorUmidade), 2),
+                        maiorUmidade = lista.Max(r => r.ValorUmidade),
+                        menorUmidade = lista.Min(r => r.ValorUmidade)
+                    };
+                }
+
+                return Content(JsonSerializer.Serialize(new
+                {
+                    sucesso = true,
+                    dados = resultado,
+                    informacoesAdicionais = informacoesAdicionais
+                }), "application/json");
+            }
+            catch (Exception ex)
+            {
+                return Content(JsonSerializer.Serialize(new { sucesso = false, mensagem = ex.Message }), "application/json");
             }
         }
 
@@ -141,63 +207,70 @@ namespace DataLogger.Controllers
             //    _subscricoesFeitas[chave] = true;
             //}
         }
-
-        private void SalvarDadosDoFiwareNoBanco(string jsonFiware, int idDispositivo, string tipoAtributo)
+        /*
+        private string SalvarDadosDoFiwareNoBanco(string jsonFiware, int idDispositivo, string tipoAtributo)
         {
             try
             {
                 using var doc = JsonDocument.Parse(jsonFiware);
-
                 var root = doc.RootElement;
 
                 if (root.TryGetProperty("sucesso", out var sucesso) && !sucesso.GetBoolean())
-                    return; // Fiware retornou erro, não salva nada
+                    return "Fiware retornou sucesso=false";
 
                 if (!root.TryGetProperty("dados", out var dadosElement))
-                    return;
+                    return "Propriedade 'dados' não encontrada no JSON";
 
                 string dadosJson = dadosElement.GetString();
                 if (string.IsNullOrEmpty(dadosJson))
-                    return;
+                    return "dadosJson está vazio ou nulo";
 
                 using var dadosDoc = JsonDocument.Parse(dadosJson);
                 var dadosRoot = dadosDoc.RootElement;
 
-                var contextResponses = dadosRoot.GetProperty("contextResponses");
-                var primeiroResponse = contextResponses[0];
-                var contextElement = primeiroResponse.GetProperty("contextElement");
-                var attributes = contextElement.GetProperty("attributes");
-                var primeiroAttr = attributes[0];
-                var valores = primeiroAttr.GetProperty("values");
+                var valores = dadosRoot
+                    .GetProperty("contextResponses")[0]
+                    .GetProperty("contextElement")
+                    .GetProperty("attributes")[0]
+                    .GetProperty("values");
 
                 if (valores.GetArrayLength() == 0)
-                    return;
-
-                var ultimoValor = valores[valores.GetArrayLength() - 1];
-                string attrValue = ultimoValor.GetProperty("attrValue").GetString();
+                    return "Array de valores está vazio";
 
                 var registroDAO = new RegistroDAO();
+                int salvos = 0;
 
-                int umidade = 0, luminosidade = 0;
-                decimal temperatura = 0;
+                foreach (var item in valores.EnumerateArray())
+                {
+                    var attrElement = item.GetProperty("attrValue");
+                    string attrValue = attrElement.ValueKind == JsonValueKind.String
+                        ? attrElement.GetString()
+                        : attrElement.GetRawText();
 
-                if (tipoAtributo == "humidity" && int.TryParse(attrValue, out int u))
-                    umidade = u;
-                else if (tipoAtributo == "luminosity" && int.TryParse(attrValue, out int l))
-                    luminosidade = l;
-                else if (tipoAtributo == "temperature" && decimal.TryParse(attrValue,
-                    System.Globalization.NumberStyles.Any,
-                    System.Globalization.CultureInfo.InvariantCulture, out decimal t))
-                    temperatura = t;
+                    int umidade = 0, luminosidade = 0;
+                    decimal temperatura = 0;
 
-                registroDAO.SalvarRegistro(idDispositivo, umidade, luminosidade, temperatura);
+                    if (tipoAtributo == "humidity")
+                        int.TryParse(attrValue, out umidade);
+                    else if (tipoAtributo == "luminosity")
+                        int.TryParse(attrValue, out luminosidade);
+                    else if (tipoAtributo == "temperature")
+                        decimal.TryParse(attrValue,
+                            System.Globalization.NumberStyles.Any,
+                            System.Globalization.CultureInfo.InvariantCulture,
+                            out temperatura);
+
+                    registroDAO.SalvarRegistro(idDispositivo, umidade, luminosidade, temperatura);
+                    salvos++;
+                }
+
+                return $"OK - {salvos} registros salvos";
             }
             catch (Exception ex)
             {
-                // Loga o erro mas não interrompe a resposta para o front-end
-                //_logger.LogError($"Erro ao salvar dados no banco: {ex.Message}");
+                return $"ERRO: {ex.Message}";
             }
         }
-
+        */
     }
 }
