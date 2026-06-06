@@ -5,8 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DataLogger.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class ApiController : Controller
     {
+        /// <summary>
+        /// Retorna a lista de usuários e seus dispositivos cadastrados.
+        /// </summary>
+        /// <param name="nomeUsuario">Nome do usuário para filtrar. Deixe vazio para retornar todos.</param>
+        /// <returns>Lista de objetos com nomeUsuario, idDispositivo e descricao</returns>
+        [HttpGet("usuariosDispositivos")]
+        [ProducesResponseType(200)]
         public IActionResult usuariosDispositivos(string nomeUsuario = null)
         {
             var dao = new ApiDAO();
@@ -23,7 +32,7 @@ namespace DataLogger.Controllers
                 });
             }
 
-            return Json(lista);
+            return Ok(lista);
         }
     }
 }
